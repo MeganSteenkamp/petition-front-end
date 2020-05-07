@@ -6,7 +6,8 @@ Vue.use(Vuex);
 const store = new Vuex.Store({
   state: {
     petition: {},
-    petitions: []
+    petitions: [],
+    signatures: []
   },
   mutations: {
     setPetitions(state, petitions) {
@@ -14,6 +15,9 @@ const store = new Vuex.Store({
     },
     setPetition(state, petition) {
       state.petition = petition;
+    },
+    setSignatures(state, signatures) {
+      state.signatures = signatures
     }
   },
   actions: {
@@ -38,11 +42,24 @@ const store = new Vuex.Store({
         .catch(error => {
           console.log(error.statusText);
         });
-    }
+    },
+    getSignatures({ commit, state }) {
+      commit("setSignatures", {});
+      let id = state && state.route && state.route.params.petitionId;
+      Vue.axios
+        .get(`http://csse-s365.canterbury.ac.nz:4001/api/v1/petitions/${id}/signatures`)
+        .then(({ data }) => {
+          commit("setSignatures", data);
+        })
+        .catch(error => {
+          console.log(error.statusText);
+        });
+    },
   },
   getters: {
-    petitions: (state) => state.petitions,
-    petition: state => state.petition
+    petitions: state => state.petitions,
+    petition: state => state.petition,
+    signatures: state => state.signatures
   }
 });
 

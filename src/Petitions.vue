@@ -3,15 +3,17 @@
     <div>
       <h3>Search and Filter</h3>
       <input v-model="search" placeholder="search" />
-      <select v-model="filter" placeholder="search">
-        <option value="">No filter</option>
-        <option v-for="category in categories" :key="category">{{
-          category
-        }}</option>
+      <select v-model="filter" placeholder="filter">
+        <option value>All categories</option>
+        <option v-for="category in categories" :key="category">
+          {{ category }}
+        </option>
       </select>
       <select v-model="sort" placeholder="Sort">
-        <option value="A-Z">A - Z</option>
-        <option value="Z-A">Z - A</option>
+        <option value="ALPHABETICAL_ASC">Title A to Z</option>
+        <option value="ALPHABETICAL_DESC">Title Z to A</option>
+        <option value="SIGNATURES_ASC">Signatures Low to High</option>
+        <option value="SIGNATURES_DESC">Signatures High to Low</option>
       </select>
     </div>
 
@@ -20,11 +22,7 @@
     </div>
     <div v-if="petitions && petitions.length > 0">
       <div id="petitions">
-        <div
-          v-for="petition in sortedPetitions"
-          :key="petition.id"
-          class="petition"
-        >
+        <div v-for="petition in sortedPetitions" :key="petition.id" class="petition">
           <img class="image" :src="getImageUrl(petition)" />
           <div class="body">
             <div class="title">
@@ -33,19 +31,13 @@
                   name: 'petition',
                   params: { petitionId: petition.petitionId },
                 }"
-              >
-                {{ petition.title }}</router-link
-              >
+              >{{ petition.title }}</router-link>
             </div>
             <div class="subtitle">
-              <div class="category" :style="labelStyle(petition)">
-                {{ petition.category }}
-              </div>
-              .
-              <div class="author">
-                {{ petition.authorName }}
-              </div>
+              <div class="category" :style="labelStyle(petition)">{{ petition.category }}</div>.
+              <div class="author">{{ petition.authorName }}</div>
             </div>
+            <p class="signatures">Signatures: {{ petition.signatureCount }}</p>
           </div>
         </div>
       </div>
@@ -60,18 +52,17 @@ import { mapGetters, mapActions } from "vuex";
 export default {
   data() {
     return {
-      sort: "A-Z",
+      sort: "SIGNATURES_DESC",
       search: "",
-      filter: "",
+      filter: ""
     };
   },
-  mounted: function () {
+  mounted: function() {
     this.getPetitions();
   },
   methods: {
     ...mapActions(["getPetitions"]),
     getImageUrl(p) {
-      console.log(p);
       return `http://csse-s365.canterbury.ac.nz:4001/api/v1/petitions/${p.petitionId}/photo`;
     },
     labelStyle(p) {
@@ -80,12 +71,12 @@ export default {
         Immigration: "#daffa3",
         Animals: "#ffc8a3",
         Environment: "#c8a3ff",
-        "Human rights": "#a3acff",
+        "Human rights": "#a3acff"
       };
       return {
-        backgroundColor: categoryColorMap[p.category] || "grey",
+        backgroundColor: categoryColorMap[p.category] || "grey"
       };
-    },
+    }
   },
   computed: {
     ...mapGetters(["petitions"]),
@@ -94,36 +85,38 @@ export default {
     },
     filteredPetitions() {
       var reduced = this.petitions;
-
       if (this.search) {
         let lowerCaseSearch = this.search.toLowerCase();
-        reduced = reduced.filter((p) =>
+        reduced = reduced.filter(p =>
           p.title.toLowerCase().includes(lowerCaseSearch)
         );
       }
-
       if (this.filter) {
-        reduced = reduced.filter((p) => p.category === this.filter);
+        reduced = reduced.filter(p => p.category === this.filter);
       }
-
       return reduced;
     },
     sortedPetitions() {
-      if (!this.sort) {
-        return this.filteredPetitions;
+      if (!this.sort || this.sort == "SIGNATURES_DESC") {
+        return this.filteredPetitions.sort((a, b) =>
+          a.signatureCount < b.signatureCount ? 1 : a.signatureCount === b.signatureCount ? a.title > b.title ? 1 : -1 : -1 );
       }
-      if (this.sort === 'A-Z') {
-        return this.filteredPetitions.sort((a, b) => (a.title > b.title) ? 1 : -1);
+      if (this.sort == "SIGNATURES_ASC") {
+        return this.filteredPetitions.sort((a, b) =>
+          a.signatureCount > b.signatureCount ? 1 : a.signatureCount === b.signatureCount ? a.title > b.title ? 1 : -1 : -1);
       }
-      if (this.sort === 'Z-A') {
-        return this.filteredPetitions.sort((a, b) => (a.title < b.title) ? 1 : -1);
+      if (this.sort === "ALPHABETICAL_ASC") {
+        return this.filteredPetitions.sort((a, b) => a.title > b.title ? 1 : -1);
+      }
+      if (this.sort === "ALPHABETICAL_DESC") {
+        return this.filteredPetitions.sort((a, b) => a.title < b.title ? 1 : -1);
       }
     },
     categories() {
-      const categories = this.petitions.map((p) => p.category);
+      const categories = this.petitions.map(p => p.category);
       return categories.filter((v, i) => categories.indexOf(v) === i);
-    },
-  },
+    }
+  }
 };
 </script>
 
