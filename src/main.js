@@ -1,14 +1,18 @@
 import Vue from 'vue';
-import App from './App.vue';
-import Home from './Home.vue';
-import Petitions from './Petitions.vue';
+import VueRouter from 'vue-router';
 import axios from 'axios';
 import VueAxios from 'vue-axios';
+import { sync } from 'vuex-router-sync'
+import App from './App';
+import Home from './Home';
+import Petition from './Petition';
+import Petitions from './Petitions';
+import store from './store';
 
 Vue.use(VueAxios, axios);
-
-import VueRouter from 'vue-router';
 Vue.use(VueRouter);
+
+
 const routes = [
   {
     path: "/",
@@ -16,9 +20,9 @@ const routes = [
     component: Home
   },
   {
-    path: "/petitions/:petitionId",
+    path: "/petition/:petitionId",
     name: "petition",
-    component: Petitions
+    component: Petition
   },
   {
     path: "/petitions",
@@ -32,8 +36,15 @@ const router = new VueRouter({
   mode: 'history'
 });
 
-new Vue({
-  el: '#app',
-  router: router,
-  render: h => h(App)
-})
+sync(store, router)
+
+const start = () => {
+  App.router = router;
+  App.store = store;
+  new Vue({
+    el: '#app',
+    template: '<App/>',
+    components: { App }
+  })
+}
+start()
