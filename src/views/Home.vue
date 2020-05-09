@@ -3,9 +3,10 @@
     <section class="hero is-dark">
       <div class="hero-body">
         <div class="container">
-          <h1 class="title">Welcome to Petition</h1>
+          <h1 class="title">A platform for change</h1>
+          <h2 class="subtitle">Join us to take action</h2>
           <div class="button-block">
-            <button class="button is-xl is-dark">Sign Up to Browse Petitions</button>
+            <button class="button is-xl is-dark">Sign Up to Sign a Petition</button>
           </div>
         </div>
       </div>
@@ -15,7 +16,7 @@
 </template>
 
 <script>
-import CategoriesList from '../components/CategoriesList';
+import CategoriesList from "../components/CategoriesList";
 export default {
   name: "home",
   components: {
@@ -26,7 +27,7 @@ export default {
 <style lang="scss" scoped>
 .hero {
   text-align: center;
-  background-image: url('./../assets/banner.jpg');
+  background-image: url("./../assets/banner.jpg");
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;

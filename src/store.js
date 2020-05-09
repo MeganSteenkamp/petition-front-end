@@ -27,7 +27,7 @@ const store = new Vuex.Store({
   actions: {
     getPetitions({ commit }) {
       Vue.axios
-        .get("http://csse-s365.canterbury.ac.nz:4001/api/v1/petitions")
+        .get("http://localhost:4941/api/v1/petitions")
         .then(({ data }) => {
           commit("setPetitions", data);
         })
@@ -39,7 +39,7 @@ const store = new Vuex.Store({
       commit("setPetition", {});
       let id = state && state.route && state.route.params.petitionId;
       Vue.axios
-        .get(`http://csse-s365.canterbury.ac.nz:4001/api/v1/petitions/${id}`)
+        .get(`http://localhost:4941/api/v1/petitions/${id}`)
         .then(({ data }) => {
           commit("setPetition", data);
         })
@@ -51,7 +51,7 @@ const store = new Vuex.Store({
       commit("setSignatures", {});
       let id = state && state.route && state.route.params.petitionId;
       Vue.axios
-        .get(`http://csse-s365.canterbury.ac.nz:4001/api/v1/petitions/${id}/signatures`)
+        .get(`http://localhost:4941/api/v1/petitions/${id}/signatures`)
         .then(({ data }) => {
           commit("setSignatures", data);
         })
@@ -61,7 +61,7 @@ const store = new Vuex.Store({
     },
     getCategories({ commit }) {
       Vue.axios
-        .get("http://csse-s365.canterbury.ac.nz:4001/api/v1/petitions/categories")
+        .get("http://localhost:4941/api/v1/petitions/categories")
         .then(({ data }) => {
           commit("setCategories", data);
         })

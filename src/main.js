@@ -5,8 +5,8 @@ import VueAxios from 'vue-axios';
 import { sync } from 'vuex-router-sync'
 import App from './App';
 import Home from './views/Home';
-import Petition from './Petition';
-import Petitions from './Petitions';
+import Petition from './views/PetitionSingle';
+import Petitions from './views/PetitionsList';
 import Login from './Login';
 import Register from './Register';
 import store from './store';

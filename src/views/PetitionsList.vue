@@ -65,7 +65,7 @@ export default {
   methods: {
     ...mapActions(["getPetitions"]),
     getImageUrl(p) {
-      return `http://csse-s365.canterbury.ac.nz:4001/api/v1/petitions/${p.petitionId}/photo`;
+      return `http://localhost:4941/api/v1/petitions/${p.petitionId}/photo`;
     },
     labelStyle(p) {
       const categoryColorMap = {
