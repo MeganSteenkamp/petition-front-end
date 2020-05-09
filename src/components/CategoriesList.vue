@@ -1,15 +1,17 @@
 <template>
   <div class="categories">
     <h2 class="subtitle is-3">Browse categories</h2>
-    <div
-      v-for="category in categories"
-      :category="category"
-      :key="category.categoryId"
-      class="column is-one-quarter"
-    >
-      <router-link :to="'/petitions'">
-        <CategoryCard :category="category" />
-      </router-link>
+    <div class="columns is-multiline">
+      <div
+        v-for="category in categories"
+        :category="category"
+        :key="category.categoryId"
+        class="column is-one-quarter"
+      >
+        <router-link :to="'/petitions'">
+          <CategoryCard :category="category" />
+        </router-link>
+      </div>
     </div>
   </div>
 </template>
