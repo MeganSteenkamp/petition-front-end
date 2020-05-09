@@ -7,7 +7,8 @@ const store = new Vuex.Store({
   state: {
     petition: {},
     petitions: [],
-    signatures: []
+    signatures: [],
+    categories: []
   },
   mutations: {
     setPetitions(state, petitions) {
@@ -17,7 +18,10 @@ const store = new Vuex.Store({
       state.petition = petition;
     },
     setSignatures(state, signatures) {
-      state.signatures = signatures
+      state.signatures = signatures;
+    },
+    setCategories(state, categories) {
+      state.categories = categories;
     }
   },
   actions: {
@@ -55,11 +59,22 @@ const store = new Vuex.Store({
           console.log(error.statusText);
         });
     },
+    getCategories({ commit }) {
+      Vue.axios
+        .get("http://csse-s365.canterbury.ac.nz:4001/api/v1/petitions/categories")
+        .then(({ data }) => {
+          commit("setCategories", data);
+        })
+        .catch(error => {
+          console.log(error.statusText);
+        });
+    },
   },
   getters: {
     petitions: state => state.petitions,
     petition: state => state.petition,
-    signatures: state => state.signatures
+    signatures: state => state.signatures,
+    categories: state => state.categories
   }
 });
 

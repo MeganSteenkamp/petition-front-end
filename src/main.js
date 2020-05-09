@@ -4,10 +4,13 @@ import axios from 'axios';
 import VueAxios from 'vue-axios';
 import { sync } from 'vuex-router-sync'
 import App from './App';
-import Home from './Home';
+import Home from './views/Home';
 import Petition from './Petition';
 import Petitions from './Petitions';
+import Login from './Login';
+import Register from './Register';
 import store from './store';
+import './../node_modules/bulma/css/bulma.css';
 
 Vue.use(VueAxios, axios);
 Vue.use(VueRouter);
@@ -28,12 +31,23 @@ const routes = [
     path: "/petitions",
     name: "petitions",
     component: Petitions
-  }
+  },
+  {
+    path: "/login",
+    name: "login",
+    component: Login
+  },
+  {
+    path: "/register",
+    name: "register",
+    component: Register
+  },
 ];
 
 const router = new VueRouter({
   routes: routes,
-  mode: 'history'
+  mode: 'history',
+  linkActiveClass: 'is-active'
 });
 
 sync(store, router)

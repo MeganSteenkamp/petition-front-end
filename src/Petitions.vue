@@ -22,16 +22,17 @@
     </div>
     <div v-if="petitions && petitions.length > 0">
       <div id="petitions">
-        <div v-for="petition in sortedPetitions" :key="petition.id" class="petition">
+        <div v-for="petition in sortedPetitions" :key="petition.petitionId" class="petition">
+          <router-link
+            :to="{
+              name: 'petition',
+              params: { petitionId: petition.petitionId },
+            }"
+          >
           <img class="image" :src="getImageUrl(petition)" />
           <div class="body">
             <div class="title">
-              <router-link
-                :to="{
-                  name: 'petition',
-                  params: { petitionId: petition.petitionId },
-                }"
-              >{{ petition.title }}</router-link>
+              {{ petition.title | capitalize }}
             </div>
             <div class="subtitle">
               <div class="category" :style="labelStyle(petition)">{{ petition.category }}</div>.
@@ -39,6 +40,7 @@
             </div>
             <p class="signatures">Signatures: {{ petition.signatureCount }}</p>
           </div>
+          </router-link>
         </div>
       </div>
     </div>
@@ -115,6 +117,13 @@ export default {
     categories() {
       const categories = this.petitions.map(p => p.category);
       return categories.filter((v, i) => categories.indexOf(v) === i);
+    }
+  },
+  filters: {
+    capitalize: function (value) {
+      if (!value) return ''
+      value = value.toString()
+      return value.charAt(0).toUpperCase() + value.slice(1)
     }
   }
 };
