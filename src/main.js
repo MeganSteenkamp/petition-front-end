@@ -1,22 +1,45 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
-import axios from 'axios';
+import Axios from 'axios';
 import VueAxios from 'vue-axios';
 import { sync } from 'vuex-router-sync'
 import App from './App';
 import Home from './views/Home';
 import Petition from './views/PetitionSingle';
 import Petitions from './views/PetitionsList';
-import Login from './Login';
-import Register from './Register';
+import Login from './components/Login';
+import Register from './components/Register';
+import Secure from './components/Secure';
 import store from './store';
 import './../node_modules/bulma/css/bulma.css';
 
-Vue.use(VueAxios, axios);
+Vue.use(VueAxios, Axios);
 Vue.use(VueRouter);
 
+const token = localStorage.getItem('token')
+if (token) {
+  Vue.prototype.$http.defaults.headers.common['X-Authorization'] = token
+}
 
 const routes = [
+  {
+    path: '/login',
+    name: 'login',
+    component: Login
+  },
+  {
+    path: '/register',
+    name: 'register',
+    component: Register
+  },
+  {
+    path: '/secure',
+    name: 'secure',
+    component: Secure,
+    meta: {
+      requiresAuth: true
+    }
+  },
   {
     path: "/",
     name: "home",
@@ -47,7 +70,18 @@ const routes = [
 const router = new VueRouter({
   routes: routes,
   mode: 'history',
-  linkActiveClass: 'is-active'
+  linkActiveClass: 'is-active',
+  beforeEach: function (to, from, next) {
+    if (to.matched.some(record => record.meta.requiresAuth)) {
+      if (store.getters.isLoggedIn) {
+        next()
+        return
+      }
+      next('/login')
+    } else {
+      next()
+    }
+  }
 });
 
 sync(store, router)
