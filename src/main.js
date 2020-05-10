@@ -9,7 +9,6 @@ import Petition from './views/PetitionSingle';
 import Petitions from './views/PetitionsList';
 import Login from './components/Login';
 import Register from './components/Register';
-import Secure from './components/Secure';
 import store from './store';
 import './../node_modules/bulma/css/bulma.css';
 
@@ -33,14 +32,6 @@ const routes = [
     component: Register
   },
   {
-    path: '/secure',
-    name: 'secure',
-    component: Secure,
-    meta: {
-      requiresAuth: true
-    }
-  },
-  {
     path: "/",
     name: "home",
     component: Home
@@ -53,7 +44,10 @@ const routes = [
   {
     path: "/petitions",
     name: "petitions",
-    component: Petitions
+    component: Petitions,
+    meta: {
+      requiresAuth: true
+    }
   },
   {
     path: "/login",
@@ -70,17 +64,18 @@ const routes = [
 const router = new VueRouter({
   routes: routes,
   mode: 'history',
-  linkActiveClass: 'is-active',
-  beforeEach: function (to, from, next) {
-    if (to.matched.some(record => record.meta.requiresAuth)) {
-      if (store.getters.isLoggedIn) {
-        next()
-        return
-      }
-      next('/login')
-    } else {
+  linkActiveClass: 'is-active'
+});
+
+router.beforeEach((to, from, next) => {
+  if(to.matched.some(record => record.meta.requiresAuth)) {
+    if (store.getters.isLoggedIn) {
       next()
+      return
     }
+    next('/login') 
+  } else {
+    next() 
   }
 });
 
