@@ -79,6 +79,9 @@
 </template>
 
 <script>
+// TODO: Allow photo uploads
+// TODO: Prevent submission when checks are not valid
+
 export default {
   data() {
     return {

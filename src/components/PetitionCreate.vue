@@ -3,14 +3,14 @@
     <h1 class="title">Start a petition</h1>
     <form @submit.prevent="createPetition">
       <div class="field" for="title">
-        <label class="label">Title</label>
+        <label class="required">Title</label>
         <div class="control">
           <input class="input" type="text" placeholder="Title" v-model="title" required autofocus />
         </div>
       </div>
 
       <div class="field" for="description">
-        <label class="label">Description</label>
+        <label class="required">Description</label>
         <div class="control">
           <input
             class="textarea"
@@ -24,7 +24,7 @@
       </div>
 
       <div class="field" for="category">
-        <label class="label">Category</label>
+        <label class="required">Category</label>
         <div class="control">
           <div class="select">
             <select id="categories" name="dropdown" required autofocus>
@@ -67,6 +67,10 @@
 
 <script>
 import Moment from "moment";
+
+// TODO: Allow photo uploads
+// TODO: Prevent submission when checks are not valid
+// TODO: Iterate to get categories
 
 export default {
   data() {
@@ -121,3 +125,10 @@ export default {
   }
 };
 </script>
+
+<style>
+  .required:after {
+    content:" *";
+    color: red;
+  }
+</style>
