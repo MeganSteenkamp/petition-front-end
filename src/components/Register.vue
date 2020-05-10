@@ -32,7 +32,7 @@
         </div>
       </div>
 
-      <div class="field" for="coutry">
+      <div class="field" for="country">
         <div class="control">
           <input class="input" type="text" placeholder="Country" v-model="country" autofocus />
         </div>
@@ -93,24 +93,16 @@ export default {
   },
   methods: {
     register: function(e) {
+      if (this.password != this.password_confirmation) {
+        this.errors.push("Passwords do not match.");
+        e.preventDefault();
+      }
+
       let data = {
-        errors: [],
         name: this.name,
         email: this.email,
         password: this.password
       };
-      if (this.city) {
-        data.city = this.city;
-      }
-      if (this.country) {
-        data.country = this.country;
-      }
-
-      if (this.password != this.password_confirmation) {
-        this.errors.push("Passwords do not match.");
-      }
-
-      e.preventDefault();
 
       this.$store
         .dispatch("register", data)

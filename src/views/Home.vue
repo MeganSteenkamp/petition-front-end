@@ -5,9 +5,11 @@
         <div class="container">
           <h1 class="title">A platform for change</h1>
           <h2 class="subtitle">Join us to take action</h2>
-          <div class="button-block">
-            <button class="button is-xl is-dark">Sign Up to Sign a Petition</button>
-          </div>
+          <router-link to="/register">
+            <div class="button-block">
+              <button class="button is-xl is-dark">Sign Up to Sign a Petition</button>
+            </div>
+          </router-link>
         </div>
       </div>
     </section>

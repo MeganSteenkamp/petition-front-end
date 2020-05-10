@@ -1,5 +1,6 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
+import Vcalendar from 'v-calendar';
 import Axios from 'axios';
 import VueAxios from 'vue-axios';
 import { sync } from 'vuex-router-sync'
@@ -7,6 +8,7 @@ import App from './App';
 import Home from './views/Home';
 import Petition from './views/PetitionSingle';
 import Petitions from './views/PetitionsList';
+import PetitionCreate from './components/PetitionCreate';
 import Login from './components/Login';
 import Register from './components/Register';
 import store from './store';
@@ -14,6 +16,11 @@ import './../node_modules/bulma/css/bulma.css';
 
 Vue.use(VueAxios, Axios);
 Vue.use(VueRouter);
+
+Vue.use(Vcalendar, {
+  datePickerTintColor: '#F00',
+  datePickerShowDayPopover: false
+})
 
 const token = localStorage.getItem('token')
 if (token) {
@@ -50,7 +57,12 @@ const routes = [
   {
     path: "/petitions",
     name: "petitions",
-    component: Petitions,
+    component: Petitions
+  },
+  {
+    path: "/start-a-petition",
+    name: "petition-create",
+    component: PetitionCreate,
     meta: {
       requiresAuth: true
     }

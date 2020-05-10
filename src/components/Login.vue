@@ -27,7 +27,7 @@
       <ul>
         <li v-for="error in errors" v-bind:key="error">{{ error }}</li>
       </ul>
-      <button type="submit">Login</button>
+      <button class="button is-link" type="submit">Login</button>
     </form>
   </div>
 </template>

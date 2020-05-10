@@ -62,7 +62,6 @@ const store = new Vuex.Store({
         commit('auth_request')
         axios({ url: 'http://localhost:4941/api/v1/users/login', data: user, method: 'POST' })
           .then(resp => {
-            console.log(resp);
             const token = resp.data.token
             const user = resp.data.userId
             localStorage.setItem('token', token)
@@ -106,6 +105,18 @@ const store = new Vuex.Store({
         .catch(error => {
           console.log(error.statusText);
         });
+    },
+    createPetition({ commit }, petition) {
+      return new Promise((resolve, reject) => {
+        commit("setPetition", {});
+        axios({ url: 'http://localhost:4941/api/v1/petitions', data: petition, method: 'POST' })
+          .then(resp => {
+            resolve(resp)
+          })
+          .catch(err => {
+            reject(err)
+          })
+      })
     },
     getSignatures({ commit, state }) {
       commit("setSignatures", {});

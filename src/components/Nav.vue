@@ -20,6 +20,7 @@
       <div class="navbar-start">
         <router-link to="/" class="navbar-item">Home</router-link>
         <router-link to="/petitions" class="navbar-item">Browse</router-link>
+        <router-link to="/start-a-petition" class="navbar-item">Start a petition</router-link>
       </div>
       <div class="navbar-end">
         <div class="navbar-item">
