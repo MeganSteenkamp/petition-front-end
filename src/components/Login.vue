@@ -1,13 +1,30 @@
 <template>
   <div>
-    <h2>Don't have an account? <router-link to="/register">Sign up</router-link></h2>
+    <h2>
+      Don't have an account?
+      <router-link to="/register">Sign up</router-link>
+    </h2>
+    <br />
     <form class="login" @submit.prevent="login">
-      <h1>Sign in</h1>
-      <label>Email</label>
-      <input required v-model="email" type="email" placeholder="Email" />
-      <label>Password</label>
-      <input required v-model="password" type="password" placeholder="Password" />
+      <h1 class="title">Sign in</h1>
+
+      <label for="email">E-Mail Address</label>
+      <div>
+        <input id="email" type="email" placeholder="Email" v-model="email" required />
+      </div>
+
+      <label for="password">Password</label>
+      <div>
+        <input id="password" type="password" placeholder="Password" v-model="password" required />
+      </div>
+
       <hr />
+      <p v-if="errors.length">
+        <b>Please correct the following error(s):</b>
+      </p>
+      <ul>
+        <li v-for="error in errors" v-bind:key="error">{{ error }}</li>
+      </ul>
       <button type="submit">Login</button>
     </form>
   </div>
@@ -17,6 +34,7 @@
 export default {
   data() {
     return {
+      errors: [],
       email: "",
       password: ""
     };
@@ -28,7 +46,9 @@ export default {
       this.$store
         .dispatch("login", { email, password })
         .then(() => this.$router.push("/"))
-        .catch(err => console.log(err));
+        .catch(err => {
+          this.errors.push("Invalid email/ password provided.");
+        });
     }
   }
 };

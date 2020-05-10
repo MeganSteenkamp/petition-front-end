@@ -6,7 +6,7 @@
         v-for="category in categories"
         :category="category"
         :key="category.categoryId"
-        class="column is-one-quarter"
+        class="column is-one-third"
       >
         <router-link :to="'/petitions'">
           <CategoryCard :category="category" />
