@@ -8,14 +8,16 @@
     <form class="login" @submit.prevent="login">
       <h1 class="title">Sign in</h1>
 
-      <label for="email">E-Mail Address</label>
-      <div>
-        <input id="email" type="email" placeholder="Email" v-model="email" required />
+      <div class="field" for="email">
+        <div class="control">
+          <input class="input" type="email" placeholder="Email address" v-model="email" required autofocus/>
+        </div>
       </div>
 
-      <label for="password">Password</label>
-      <div>
-        <input id="password" type="password" placeholder="Password" v-model="password" required />
+      <div class="field" for="password">
+        <div class="control">
+          <input class="input" type="password" placeholder="Password" v-model="password" required autofocus/>
+        </div>
       </div>
 
       <hr />

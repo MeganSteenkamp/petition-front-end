@@ -4,37 +4,64 @@
       Already have an account?
       <router-link to="/login">Log In</router-link>
     </h2>
-    <br>
+    <br />
     <h1 class="title">Register</h1>
     <form @submit.prevent="register">
-      <label for="name">Name</label>
-      <div>
-        <input id="name" type="text" v-model="name" required autofocus />
+      <div class="field" for="name">
+        <div class="control">
+          <input class="input" type="text" placeholder="Name" v-model="name" required autofocus />
+        </div>
       </div>
 
-      <label for="email">E-Mail Address</label>
-      <div>
-        <input id="email" type="email" v-model="email" required />
+      <div class="field" for="email">
+        <div class="control">
+          <input
+            class="input"
+            type="email"
+            placeholder="Email address"
+            v-model="email"
+            required
+            autofocus
+          />
+        </div>
       </div>
 
-      <label for="city">City</label>
-      <div>
-        <input id="city" type="city" v-model="city" />
+      <div class="field" for="city">
+        <div class="control">
+          <input class="input" type="text" placeholder="City" v-model="city" autofocus />
+        </div>
       </div>
 
-      <label for="country">Country</label>
-      <div>
-        <input id="country" type="country" v-model="country" />
+      <div class="field" for="coutry">
+        <div class="control">
+          <input class="input" type="text" placeholder="Country" v-model="country" autofocus />
+        </div>
       </div>
 
-      <label for="password">Password</label>
-      <div>
-        <input id="password" type="password" v-model="password" required />
+      <div class="field" for="password">
+        <div class="control">
+          <input
+            class="input"
+            type="password"
+            placeholder="Password"
+            v-model="password"
+            required
+            autofocus
+          />
+        </div>
       </div>
 
-      <label for="password-confirm">Confirm Password</label>
-      <div>
-        <input id="password-confirm" type="password" v-model="password_confirmation" required />
+      <div class="field" for="password_confirmation">
+        <div class="control">
+          <input
+            class="input"
+            type="password"
+            placeholder="Confirm Password"
+            v-model="password_confirmation"
+            required
+            autofocus
+          />
+        </div>
       </div>
 
       <p v-if="errors.length">
