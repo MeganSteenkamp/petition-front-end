@@ -65,6 +65,11 @@ const routes = [
     component: Petitions
   },
   {
+    path: "/my-petitions",
+    name: "my-petitions",
+    component: Petitions
+  },
+  {
     path: "/start-a-petition",
     name: "petition-create",
     component: PetitionCreate,

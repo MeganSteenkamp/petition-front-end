@@ -44,10 +44,6 @@
         <v-date-picker v-model="closingDate" type="date" />
       </div>
 
-      <div class="hero-image">
-        <input type="file" id="image" name="image" accept="image/png, image/jpeg, image/gif" />
-      </div>
-
       <p v-if="errors.length">
         <b>Please correct the following error(s):</b>
       </p>
@@ -132,14 +128,6 @@ export default {
         .dispatch("createPetition", data)
         .then(res => {
           let petitionId = res.data.petitionId;
-
-          /*
-          if (file) {
-              // TODO FIX THIS
-            console.log("in here with file")
-            this.$store.dispatch("uploadHeroImage", file);
-          }
-          */
 
           this.$router.push({
             name: "petition",

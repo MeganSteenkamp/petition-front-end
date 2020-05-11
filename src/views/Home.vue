@@ -4,12 +4,7 @@
       <div class="hero-body">
         <div class="container">
           <h1 class="title">A platform for change</h1>
-          <h2 class="subtitle">Join us to take action</h2>
-          <router-link to="/register">
-            <div class="button-block">
-              <button class="button is-xl is-dark">Sign Up to Sign a Petition</button>
-            </div>
-          </router-link>
+          <h2 class="subtitle">Join us and take action today</h2>
         </div>
       </div>
     </section>
@@ -37,7 +32,7 @@ export default {
 }
 .hero-body .title {
   text-shadow: 4px 4px 4px rgba(0, 0, 0, 0.6);
-  padding: 40px 0 20px 0;
+  padding: 60px 0 20px 0;
   font-size: 60px;
 }
 .subtitle {

@@ -56,7 +56,8 @@ export default {
     return {
       sort: "SIGNATURES_DESC",
       search: "",
-      filter: this.$route.query.category || ""
+      filter: this.$route.query.category || "",
+      authorFilter: this.$route.query.author || "",
     };
   },
   mounted: function() {
@@ -95,6 +96,9 @@ export default {
       }
       if (this.filter) {
         reduced = reduced.filter(p => p.category === this.filter);
+      }
+      if (this.author) {
+        reduced = reduced.filter(p => p.authorName === this.author);
       }
       return reduced;
     },

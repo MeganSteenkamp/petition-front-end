@@ -9,6 +9,7 @@ const store = new Vuex.Store({
     status: '',
     token: localStorage.getItem('token') || '',
     user: {},
+    userId: {},
     petition: {},
     petitions: [],
     signatures: [],
@@ -18,10 +19,12 @@ const store = new Vuex.Store({
     auth_request(state) {
       state.status = 'loading'
     },
-    auth_success(state, { token, user }) {
+    auth_success(state, { token, userId }) {
       state.status = 'success'
       state.token = token
-      state.user = user
+      console.log(userId)
+      state.userId = userId
+      console.log(state.userId)
     },
     auth_error(state) {
       state.status = 'error'
@@ -35,6 +38,9 @@ const store = new Vuex.Store({
     },
     setPetition(state, petition) {
       state.petition = petition;
+    },
+    setUser(state, user) {
+      state.user = user;
     },
     setSignatures(state, signatures) {
       state.signatures = signatures;
@@ -63,10 +69,10 @@ const store = new Vuex.Store({
         axios({ url: 'http://localhost:4941/api/v1/users/login', data: user, method: 'POST' })
           .then(resp => {
             const token = resp.data.token
-            const user = resp.data.userId
+            const userId = resp.data.userId
             localStorage.setItem('token', token)
             axios.defaults.headers.common['X-Authorization'] = token
-            commit('auth_success', { token, user })
+            commit('auth_success', { token, userId })
             resolve(resp)
           })
           .catch(err => {
@@ -106,6 +112,22 @@ const store = new Vuex.Store({
           console.log(error.statusText);
         });
     },
+    getUser({ commit, state }) {
+      commit("setUser", {});
+      let id = state && state.userId;
+      console.log("this is user id");
+      console.log(id);
+      console.log(state.userId);
+      Vue.axios
+        .get(`http://localhost:4941/api/v1/users/${id}`)
+        .then(({ data }) => {
+          console.log(data)
+          commit("setUser", data);
+        })
+        .catch(error => {
+          console.log(error.statusText);
+        });
+    },
     createPetition({ commit }, petition) {
       return new Promise((resolve, reject) => {
         commit("setPetition", {});
@@ -140,30 +162,13 @@ const store = new Vuex.Store({
           console.log(error.statusText);
         });
     },
-    uploadHeroImage({ commit, state }, data) {
-      /*
-      TODO: Solve uploading an image
-      let id = state && state.route && state.route.params.petitionId;
-      Vue.axios
-        .put(`http://localhost:4941/api/v1/petitions/${id}/photo`, data, {
-          headers: {
-            'Content-Type': "image/jpeg",
-          }
-        }).then(({ data }) => {
-          commit("setCategories", data);
-        })
-        .catch(error => {
-          console.log(error.statusText);
-        });
-      */
-    }
-
   },
   getters: {
     isLoggedIn: state => !!state.token,
     authStatus: state => state.status,
     petitions: state => state.petitions,
     petition: state => state.petition,
+    user: state => state.user,
     signatures: state => state.signatures,
     categories: state => state.categories,
   }
