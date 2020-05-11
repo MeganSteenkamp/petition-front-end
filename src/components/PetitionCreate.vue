@@ -27,15 +27,13 @@
         <label class="required">Category</label>
         <div class="control">
           <div class="select">
-            <select id="categories" name="dropdown" required autofocus>
-              <option value="0" selected>Select dropdown</option>
-              <option value="1">Animals</option>
-              <option value="2">Environment</option>
-              <option value="3">Entertainment</option>
-              <option value="4">Human rights</option>
-              <option value="5">Immigration</option>
-              <option value="6">Justice</option>
-              <option value="7">Other</option>
+            <select id="categories" name="dropdown" v-model="selectedCategory" required autofocus>
+              <option disabled value=0>Select a category</option>
+              <option
+                v-for="category in categories"
+                :key="category.categoryId"
+                :value="category.categoryId"
+              >{{category.name}}</option>
             </select>
           </div>
         </div>
@@ -66,6 +64,8 @@
 </template>
 
 <script>
+import Vue from "vue";
+import { mapGetters, mapActions } from "vuex";
 import Moment from "moment";
 
 // TODO: Allow photo uploads
@@ -78,21 +78,23 @@ export default {
       errors: [],
       title: "",
       description: "",
+      selectedCategory: 0,
       closingDate: null
     };
   },
+  mounted: function() {
+    this.getCategories();
+  },
   methods: {
+    ...mapActions(["getCategories"]),
     createPetition: function(e) {
       const today = new Date();
       const closingDate = Moment(this.closingDate).format("YYYY-MM-DD");
 
-      var category = document.getElementById("categories");
-      var categoryId = parseInt(category.options[category.selectedIndex].value);
-
       let data = {
         title: this.title,
         description: this.description,
-        categoryId: categoryId
+        categoryId: selectedCategory
       };
 
       if (closingDate) {
@@ -122,13 +124,16 @@ export default {
           this.errors.push(err);
         });
     }
+  },
+  computed: {
+    ...mapGetters(["categories"])
   }
 };
 </script>
 
 <style>
-  .required:after {
-    content:" *";
-    color: red;
-  }
+.required:after {
+  content: " *";
+  color: red;
+}
 </style>

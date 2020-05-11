@@ -147,7 +147,7 @@ const store = new Vuex.Store({
     petitions: state => state.petitions,
     petition: state => state.petition,
     signatures: state => state.signatures,
-    categories: state => state.categories
+    categories: state => state.categories,
   }
 });
 

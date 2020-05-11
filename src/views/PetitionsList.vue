@@ -56,7 +56,7 @@ export default {
     return {
       sort: "SIGNATURES_DESC",
       search: "",
-      filter: ""
+      filter: this.$route.query.category || ""
     };
   },
   mounted: function() {

@@ -95,10 +95,23 @@ export default {
     };
   },
   methods: {
-    register: function(e) {
-      if (this.password != this.password_confirmation) {
+    validateForm: function() {
+      this.errors = [];
+
+      if (this.password !== this.password_confirmation) {
         this.errors.push("Passwords do not match.");
-        e.preventDefault();
+        return;
+      }
+
+      return this.errors.length === 0;
+    },
+    register: function(e) {
+      e.preventDefault();
+      
+      let isValid = this.validateForm();
+      console.log(isValid);
+      if (!isValid) {
+        return;
       }
 
       let data = {
