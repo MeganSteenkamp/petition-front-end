@@ -73,8 +73,6 @@ import { mapGetters, mapActions } from "vuex";
 import Moment from "moment";
 
 // TODO: Allow photo uploads
-// TODO: Prevent submission when checks are not valid
-// TODO: Iterate to get categories
 
 export default {
   data() {

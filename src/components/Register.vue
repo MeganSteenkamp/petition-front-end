@@ -80,7 +80,6 @@
 
 <script>
 // TODO: Allow photo uploads
-// TODO: Prevent submission when checks are not valid
 
 export default {
   data() {
@@ -107,7 +106,7 @@ export default {
     },
     register: function(e) {
       e.preventDefault();
-      
+
       let isValid = this.validateForm();
       console.log(isValid);
       if (!isValid) {
