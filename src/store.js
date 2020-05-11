@@ -18,7 +18,7 @@ const store = new Vuex.Store({
     auth_request(state) {
       state.status = 'loading'
     },
-    auth_success(state, {token, user}) {
+    auth_success(state, { token, user }) {
       state.status = 'success'
       state.token = token
       state.user = user
@@ -66,7 +66,7 @@ const store = new Vuex.Store({
             const user = resp.data.userId
             localStorage.setItem('token', token)
             axios.defaults.headers.common['X-Authorization'] = token
-            commit('auth_success', {token, user})
+            commit('auth_success', { token, user })
             resolve(resp)
           })
           .catch(err => {
@@ -140,6 +140,24 @@ const store = new Vuex.Store({
           console.log(error.statusText);
         });
     },
+    uploadHeroImage({ commit, state }, data) {
+      /*
+      TODO: Solve uploading an image
+      let id = state && state.route && state.route.params.petitionId;
+      Vue.axios
+        .put(`http://localhost:4941/api/v1/petitions/${id}/photo`, data, {
+          headers: {
+            'Content-Type': "image/jpeg",
+          }
+        }).then(({ data }) => {
+          commit("setCategories", data);
+        })
+        .catch(error => {
+          console.log(error.statusText);
+        });
+      */
+    }
+
   },
   getters: {
     isLoggedIn: state => !!state.token,

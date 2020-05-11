@@ -28,7 +28,7 @@
         <div class="control">
           <div class="select">
             <select id="categories" name="dropdown" v-model="selectedCategory" required autofocus>
-              <option disabled value=0>Select a category</option>
+              <option disabled value="0">Select a category</option>
               <option
                 v-for="category in categories"
                 :key="category.categoryId"
@@ -42,6 +42,10 @@
       <div class="field">
         <label class="label">Closing date</label>
         <v-date-picker v-model="closingDate" type="date" />
+      </div>
+
+      <div class="hero-image">
+        <input type="file" id="image" name="image" accept="image/png, image/jpeg, image/gif" />
       </div>
 
       <p v-if="errors.length">
@@ -79,7 +83,8 @@ export default {
       title: "",
       description: "",
       selectedCategory: 0,
-      closingDate: null
+      closingDate: null,
+      image: null
     };
   },
   mounted: function() {
@@ -87,34 +92,57 @@ export default {
   },
   methods: {
     ...mapActions(["getCategories"]),
-    createPetition: function(e) {
+    validateForm: function() {
+      this.errors = [];
+
       const today = new Date();
       const closingDate = Moment(this.closingDate).format("YYYY-MM-DD");
+
+      if (closingDate < today) {
+        this.errors.push("Closing date must be in the future.");
+        return;
+      }
+
+      if (this.selectedCategory == 0) {
+        this.errors.push("A category must be selected.");
+        return;
+      }
+      return this.errors.length === 0;
+    },
+    createPetition: function(e) {
+      e.preventDefault();
+
+      let isValid = this.validateForm();
+      console.log(isValid);
+      if (!isValid) {
+        return;
+      }
 
       let data = {
         title: this.title,
         description: this.description,
-        categoryId: selectedCategory
+        categoryId: this.selectedCategory
       };
 
-      if (closingDate) {
-        data.closingDate = closingDate;
-      }
+      console.log(data);
 
-      if (data.closingDate < today) {
-        this.errors.push("Closing date must be in the future.");
+      if (this.closingDate) {
+        data.closingDate = Moment(this.closingDate).format("YYYY-MM-DD");
       }
-
-      if (data.categoryId == 0) {
-        this.errors.push("A category must be selected.");
-      }
-
-      e.preventDefault();
 
       this.$store
         .dispatch("createPetition", data)
         .then(res => {
           let petitionId = res.data.petitionId;
+
+          /*
+          if (file) {
+              // TODO FIX THIS
+            console.log("in here with file")
+            this.$store.dispatch("uploadHeroImage", file);
+          }
+          */
+
           this.$router.push({
             name: "petition",
             params: { petitionId: petitionId }
