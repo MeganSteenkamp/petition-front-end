@@ -8,7 +8,7 @@
         :key="category.categoryId"
         class="column is-one-third"
       >
-        <router-link :to="{name: 'petitions-category', query: {category: category.name}}">
+        <router-link :to="{name: 'petitions', query: {category: category.name}}">
           <CategoryCard :category="category" />
         </router-link>
       </div>
@@ -34,10 +34,10 @@ export default {
     };
   },
   mounted: function() {
-    this.getCategories();
+    this.loadCategories();
   },
   methods: {
-    ...mapActions(["getCategories"])
+    ...mapActions(["loadCategories"])
   },
   computed: {
     ...mapGetters(["categories"])

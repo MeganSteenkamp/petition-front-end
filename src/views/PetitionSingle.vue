@@ -40,7 +40,7 @@
         <h2><Strong>Signatories:</strong></h2>
         <div v-if="signatures && signatures.length > 0">
           <div id="signatures">
-            <div v-for="signature in signatures" :key="signature" class="petition">
+            <div v-for="signature in signatures" :key="signature.signatoryId" class="petition">
               <li>{{ signature.name }}</li>
             </div>
           </div>
@@ -56,19 +56,18 @@ import { mapGetters, mapActions } from "vuex";
 import Moment from "moment";
 
 export default {
-  mounted: function() {
-    this.getPetition();
-    this.getSignatures();
+  mounted() {
+    this.loadPetition(this.petitionId);
+    this.loadSignatures(this.petitionId);
   },
   methods: {
-    ...mapActions(["getPetition"]),
-    ...mapActions(["getSignatures"]),
+    ...mapActions(["loadPetition", "loadSignatures"]),
     getImageUrl(p) {
-      return `http://localhost:4941/api/v1/petitions/${p.petitionId}/photo`;
+      return `http://csse-s365.canterbury.ac.nz:4001/api/v1/petitions/${p.petitionId}/photo`;
     }
   },
   filters: {
-    moment: function(date) {
+    moment(date) {
       if (date) {
         return Moment(date).format("LL");
       }
@@ -77,7 +76,10 @@ export default {
   },
   computed: {
     ...mapGetters(["petition"]),
-    ...mapGetters(["signatures"])
+    ...mapGetters(["signatures"]),
+    petitionId() {
+      return this.$route && this.$route.params.petitionId;
+    }
   }
 };
 </script>

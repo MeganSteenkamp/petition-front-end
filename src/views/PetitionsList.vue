@@ -22,24 +22,33 @@
     </div>
     <div v-if="petitions && petitions.length > 0">
       <div id="petitions">
-        <div v-for="petition in sortedPetitions" :key="petition.petitionId" class="petition">
+        <div
+          v-for="petition in sortedPetitions"
+          :key="petition.petitionId"
+          class="petition"
+        >
           <router-link
             :to="{
               name: 'petition',
-              params: { petitionId: petition.petitionId },
+              params: { petitionId: petition.petitionId }
             }"
           >
-          <img class="image" :src="getImageUrl(petition)" />
-          <div class="body">
-            <div class="title">
-              {{ petition.title | capitalize }}
+            <img class="image" :src="getImageUrl(petition)" />
+            <div class="body">
+              <div class="title">
+                {{ petition.title | capitalize }}
+              </div>
+              <div class="subtitle">
+                <div class="category" :style="labelStyle(petition)">
+                  {{ petition.category }}
+                </div>
+                .
+                <div class="author">{{ petition.authorName }}</div>
+              </div>
+              <p class="signatures">
+                Signatures: {{ petition.signatureCount }}
+              </p>
             </div>
-            <div class="subtitle">
-              <div class="category" :style="labelStyle(petition)">{{ petition.category }}</div>.
-              <div class="author">{{ petition.authorName }}</div>
-            </div>
-            <p class="signatures">Signatures: {{ petition.signatureCount }}</p>
-          </div>
           </router-link>
         </div>
       </div>
@@ -50,6 +59,7 @@
 <script>
 import Vue from "vue";
 import { mapGetters, mapActions } from "vuex";
+import api from "../api";
 
 export default {
   data() {
@@ -57,16 +67,16 @@ export default {
       sort: "SIGNATURES_DESC",
       search: "",
       filter: this.$route.query.category || "",
-      authorFilter: this.$route.query.author || "",
+      authorFilter: this.$route.query.author || ""
     };
   },
-  mounted: function() {
-    this.getPetitions();
+  mounted() {
+    this.loadPetitions();
   },
   methods: {
-    ...mapActions(["getPetitions"]),
+    ...mapActions(["loadPetitions"]),
     getImageUrl(p) {
-      return `http://localhost:4941/api/v1/petitions/${p.petitionId}/photo`;
+      return api.endpoint(`petitions/${p.petitionId}/photo`);
     },
     labelStyle(p) {
       const categoryColorMap = {
@@ -105,17 +115,35 @@ export default {
     sortedPetitions() {
       if (!this.sort || this.sort == "SIGNATURES_DESC") {
         return this.filteredPetitions.sort((a, b) =>
-          a.signatureCount < b.signatureCount ? 1 : a.signatureCount === b.signatureCount ? a.title > b.title ? 1 : -1 : -1 );
+          a.signatureCount < b.signatureCount
+            ? 1
+            : a.signatureCount === b.signatureCount
+            ? a.title > b.title
+              ? 1
+              : -1
+            : -1
+        );
       }
       if (this.sort == "SIGNATURES_ASC") {
         return this.filteredPetitions.sort((a, b) =>
-          a.signatureCount > b.signatureCount ? 1 : a.signatureCount === b.signatureCount ? a.title > b.title ? 1 : -1 : -1);
+          a.signatureCount > b.signatureCount
+            ? 1
+            : a.signatureCount === b.signatureCount
+            ? a.title > b.title
+              ? 1
+              : -1
+            : -1
+        );
       }
       if (this.sort === "ALPHABETICAL_ASC") {
-        return this.filteredPetitions.sort((a, b) => a.title > b.title ? 1 : -1);
+        return this.filteredPetitions.sort((a, b) =>
+          a.title > b.title ? 1 : -1
+        );
       }
       if (this.sort === "ALPHABETICAL_DESC") {
-        return this.filteredPetitions.sort((a, b) => a.title < b.title ? 1 : -1);
+        return this.filteredPetitions.sort((a, b) =>
+          a.title < b.title ? 1 : -1
+        );
       }
     },
     categories() {
@@ -124,10 +152,10 @@ export default {
     }
   },
   filters: {
-    capitalize: function (value) {
-      if (!value) return ''
-      value = value.toString()
-      return value.charAt(0).toUpperCase() + value.slice(1)
+    capitalize(value) {
+      if (!value) return "";
+      value = value.toString();
+      return value.charAt(0).toUpperCase() + value.slice(1);
     }
   }
 };

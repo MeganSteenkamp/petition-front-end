@@ -9,19 +9,24 @@
       <div class="navbar-start">
         <router-link to="/" class="navbar-item">Home</router-link>
         <router-link to="/petitions" class="navbar-item">Browse</router-link>
-        <router-link to="/start-a-petition" class="navbar-item">Start a petition</router-link>
+        <router-link to="/start-a-petition" class="navbar-item" v-if="this.user"
+          >Start a petition</router-link
+        >
       </div>
       <div class="navbar-end">
         <router-link
-          v-if="isLoggedIn"
-          :to="{name: 'my-petitions', query: {author: this.user}}"
+          v-if="this.user"
+          :to="{ name: 'my-petitions', query: { author: this.user } }"
           class="navbar-item"
-        >My petitions</router-link>
-        <router-link v-if="isLoggedIn" to="/account" class="navbar-item">Account</router-link>
+          >My petitions</router-link
+        >
+        <router-link v-if="this.user" to="/account" class="navbar-item"
+          >Account</router-link
+        >
         <div class="navbar-item">
           <div class="buttons">
-            <span v-if="isLoggedIn">
-              <a class="button is-dark" @click="logout">
+            <span v-if="this.user">
+              <a class="button is-dark" @click="signOut">
                 <strong>Logout</strong>
               </a>
             </span>
@@ -43,25 +48,19 @@ import Vue from "vue";
 import { mapGetters, mapActions } from "vuex";
 
 export default {
-  name: "Nav",
-  mounted: function() {
-    this.getUser();
-    console.log(user);
+  mounted() {
+    this.loadUser();
   },
   methods: {
-    ...mapActions(["getUser"]),
-    logout: function() {
-      this.$store.dispatch("logout").then(() => {
-        this.$router.push("/");
-      });
+    ...mapActions(["loadUser", "logout"]),
+    async signOut() {
+      await this.logout();
+      this.$router.push("/");
     }
   },
   computed: {
-    isLoggedIn: function() {
-      return this.$store.getters.isLoggedIn;
-    },
     ...mapGetters(["user"])
-  },
+  }
 };
 </script>
 <style lang="scss" scoped>

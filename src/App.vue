@@ -1,5 +1,5 @@
 <template>
-  <div id="app">
+  <div class="app" id="app">
     <Nav />
     <router-view />
   </div>
@@ -35,5 +35,9 @@ export default {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   color: #2c3e50;
+}
+.app {
+  margin-left: 20px;
+  margin-right: 20px;
 }
 </style>

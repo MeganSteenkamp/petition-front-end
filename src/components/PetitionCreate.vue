@@ -1,11 +1,18 @@
 <template>
   <div>
     <h1 class="title">Start a petition</h1>
-    <form @submit.prevent="createPetition">
+    <form @submit.prevent="submit">
       <div class="field" for="title">
         <label class="required">Title</label>
         <div class="control">
-          <input class="input" type="text" placeholder="Title" v-model="title" required autofocus />
+          <input
+            class="input"
+            type="text"
+            placeholder="Title"
+            v-model="title"
+            required
+            autofocus
+          />
         </div>
       </div>
 
@@ -27,29 +34,30 @@
         <label class="required">Category</label>
         <div class="control">
           <div class="select">
-            <select id="categories" name="dropdown" v-model="selectedCategory" required autofocus>
-              <option disabled value="0">Select a category</option>
+            <select
+              id="categories"
+              name="dropdown"
+              v-model="selectedCategory"
+              required
+              autofocus
+            >
               <option
                 v-for="category in categories"
                 :key="category.categoryId"
                 :value="category.categoryId"
-              >{{category.name}}</option>
+                >{{ category.name }}</option
+              >
             </select>
           </div>
         </div>
       </div>
 
-      <div class="field">
+      <div class="field" for="closingDate">
         <label class="label">Closing date</label>
-        <v-date-picker v-model="closingDate" type="date" />
+        <div class="control">
+          <date-picker v-model="closingDate" type="date" />
+        </div>
       </div>
-
-      <p v-if="errors.length">
-        <b>Please correct the following error(s):</b>
-      </p>
-      <ul>
-        <li v-for="error in errors" v-bind:key="error">{{ error }}</li>
-      </ul>
 
       <div class="field is-grouped">
         <div class="control">
@@ -59,6 +67,14 @@
           <button class="button is-link is-light">Cancel</button>
         </div>
       </div>
+
+      <div class="field">
+        <ul>
+          <li class="error" v-for="error in errors" v-bind:key="error">
+            {{ error }}
+          </li>
+        </ul>
+      </div>
     </form>
   </div>
 </template>
@@ -67,47 +83,46 @@
 import Vue from "vue";
 import { mapGetters, mapActions } from "vuex";
 import Moment from "moment";
+import DatePicker from "vue2-datepicker";
+import "vue2-datepicker/index.css";
 
 // TODO: Allow photo uploads
 
 export default {
+  components: { DatePicker },
   data() {
     return {
       errors: [],
       title: "",
       description: "",
-      selectedCategory: 0,
+      selectedCategory: 1,
       closingDate: null,
       image: null
     };
   },
   mounted: function() {
-    this.getCategories();
+    this.loadCategories();
   },
   methods: {
-    ...mapActions(["getCategories"]),
+    ...mapActions(["loadCategories", "createPetition"]),
     validateForm: function() {
       this.errors = [];
 
-      const today = new Date();
-      const closingDate = Moment(this.closingDate).format("YYYY-MM-DD");
+      const today = Moment();
+      const closingDate = Moment(this.closingDate);
 
       if (closingDate < today) {
         this.errors.push("Closing date must be in the future.");
-        return;
       }
 
       if (this.selectedCategory == 0) {
         this.errors.push("A category must be selected.");
-        return;
       }
+
       return this.errors.length === 0;
     },
-    createPetition: function(e) {
-      e.preventDefault();
-
+    async submit(e) {
       let isValid = this.validateForm();
-      console.log(isValid);
       if (!isValid) {
         return;
       }
@@ -118,25 +133,14 @@ export default {
         categoryId: this.selectedCategory
       };
 
-      console.log(data);
-
       if (this.closingDate) {
         data.closingDate = Moment(this.closingDate).format("YYYY-MM-DD");
       }
-
-      this.$store
-        .dispatch("createPetition", data)
-        .then(res => {
-          let petitionId = res.data.petitionId;
-
-          this.$router.push({
-            name: "petition",
-            params: { petitionId: petitionId }
-          });
-        })
-        .catch(err => {
-          this.errors.push(err);
-        });
+      try {
+        await this.createPetition(data);
+      } catch (e) {
+        this.errors.push(e.message);
+      }
     }
   },
   computed: {
@@ -149,5 +153,14 @@ export default {
 .required:after {
   content: " *";
   color: red;
+}
+.error {
+  border: 1px solid red;
+  color: red;
+  border-radius: 5px;
+  padding: 5px;
+}
+.label {
+  text-align: left;
 }
 </style>

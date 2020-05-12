@@ -5,7 +5,7 @@
       <router-link to="/register">Sign up</router-link>
     </h2>
     <br />
-    <form class="login" @submit.prevent="login">
+    <form class="login" @submit.prevent="performLogin">
       <h1 class="title">Sign in</h1>
 
       <div class="field" for="email">
@@ -33,6 +33,9 @@
 </template>
 
 <script>
+import Vue from "vue";
+import { mapGetters, mapActions } from "vuex";
+
 export default {
   data() {
     return {
@@ -42,15 +45,14 @@ export default {
     };
   },
   methods: {
-    login: function() {
-      let email = this.email;
-      let password = this.password;
-      this.$store
-        .dispatch("login", { email, password })
-        .then(() => this.$router.push("/"))
-        .catch(err => {
-          this.errors.push("Invalid email/ password provided.");
-        });
+    ...mapActions(["login"]),
+    async performLogin() {
+      let details = {
+        email: this.email,
+        password: this.password
+      };
+      await this.login(details);
+      this.$router.push("/");
     }
   }
 };

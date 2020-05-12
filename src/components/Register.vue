@@ -6,10 +6,17 @@
     </h2>
     <br />
     <h1 class="title">Register</h1>
-    <form @submit.prevent="register">
+    <form @submit.prevent="submit">
       <div class="field" for="name">
         <div class="control">
-          <input class="input" type="text" placeholder="Name" v-model="name" required autofocus />
+          <input
+            class="input"
+            type="text"
+            placeholder="Name"
+            v-model="name"
+            required
+            autofocus
+          />
         </div>
       </div>
 
@@ -23,18 +30,6 @@
             required
             autofocus
           />
-        </div>
-      </div>
-
-      <div class="field" for="city">
-        <div class="control">
-          <input class="input" type="text" placeholder="City" v-model="city" autofocus />
-        </div>
-      </div>
-
-      <div class="field" for="country">
-        <div class="control">
-          <input class="input" type="text" placeholder="Country" v-model="country" autofocus />
         </div>
       </div>
 
@@ -79,7 +74,8 @@
 </template>
 
 <script>
-// TODO: Allow photo uploads
+import Vue from "vue";
+import { mapGetters, mapActions } from "vuex";
 
 export default {
   data() {
@@ -87,14 +83,13 @@ export default {
       errors: [],
       name: "",
       email: "",
-      city: undefined,
-      country: undefined,
       password: "",
       password_confirmation: ""
     };
   },
   methods: {
-    validateForm: function() {
+    ...mapActions(["register", "login"]),
+    validateForm() {
       this.errors = [];
 
       if (this.password !== this.password_confirmation) {
@@ -104,32 +99,22 @@ export default {
 
       return this.errors.length === 0;
     },
-    register: function(e) {
-      e.preventDefault();
-
+    async submit(e) {
       let isValid = this.validateForm();
-      console.log(isValid);
       if (!isValid) {
         return;
       }
 
-      let data = {
+      let user = {
         name: this.name,
         email: this.email,
         password: this.password
       };
 
-      this.$store
-        .dispatch("register", data)
-        .then(res => {
-          let email = data.email;
-          let password = data.password;
-          this.$store.dispatch("login", { email, password });
-          this.$router.push("/");
-        })
-        .catch(err => {
-          this.errors.push("This email address is already in use.");
-        });
+      await this.register(user);
+      await this.login(user);
+
+      this.$router.push("/");
     }
   }
 };
