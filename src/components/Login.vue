@@ -69,7 +69,7 @@ export default {
         await this.login(details);
         this.$router.push("/");
       } catch (e) {
-        this.errors.push(e.message);
+        this.errors.push("Invalid email/password provided.");
       }
     }
   }

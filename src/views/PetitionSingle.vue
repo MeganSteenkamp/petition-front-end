@@ -57,7 +57,7 @@ import Moment from "moment";
 import api from "./../api";
 
 export default {
-  mounted() {
+  mounted: function() {
     this.loadPetition(this.petitionId);
     this.loadSignatures(this.petitionId);
   },

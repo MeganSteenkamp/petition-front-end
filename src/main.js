@@ -7,6 +7,7 @@ import App from "./App";
 import Home from "./views/Home";
 import Petition from "./views/PetitionSingle";
 import Petitions from "./views/PetitionsList";
+import MyPetitions from "./views/MyPetitions";
 import PetitionCreate from "./components/PetitionCreate";
 import Login from "./components/Login";
 import Register from "./components/Register";
@@ -41,7 +42,7 @@ const routes = [
   {
     path: "/my-petitions",
     name: "my-petitions",
-    component: Petitions
+    component: MyPetitions
   },
   {
     path: "/start-a-petition",

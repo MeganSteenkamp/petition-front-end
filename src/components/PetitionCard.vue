@@ -58,7 +58,6 @@ export default {
   box-shadow: none;
   padding-left: 20px;
 }
-
 .card.is-horizontal .card-image {
   justify-content: right;
 }
@@ -75,11 +74,5 @@ export default {
   padding-top: 20px;
   padding-bottom: 0;
   font-size: 0.8em;
-}
-.card-footer {
-  position: relative;
-  height: 10px;
-  clear: both;
-  padding-top: 5px;
 }
 </style>

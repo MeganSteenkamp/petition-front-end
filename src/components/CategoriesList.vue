@@ -5,7 +5,7 @@
         v-for="category in categories.slice(0,6)"
         :category="category"
         :key="category.categoryId"
-        class="column"
+        class="column is-one-third"
       >
         <router-link :to="{name: 'petitions', query: {category: category.name}}">
           <CategoryCard :category="category" />
@@ -45,7 +45,7 @@ export default {
 </script>
 <style lang="scss" scoped>
 .categories {
-  margin-top: 100px;
+  margin-top: 10px;
   text-align: center;
   justify-content: center;
   align-items: center;

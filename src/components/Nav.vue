@@ -14,7 +14,7 @@
       <div class="navbar-end">
         <router-link
           v-if="this.user"
-          :to="{ name: 'my-petitions', query: { author: this.user } }"
+          :to="{ name: 'my-petitions' }"
           class="navbar-item"
         >My petitions</router-link>
         <router-link v-if="this.user" to="/account" class="navbar-item">Account</router-link>
@@ -43,7 +43,7 @@ import Vue from "vue";
 import { mapGetters, mapActions } from "vuex";
 
 export default {
-  mounted() {
+  mounted: function() {
     this.loadUser();
   },
   methods: {
@@ -57,6 +57,7 @@ export default {
     ...mapGetters(["user"])
   }
 };
+
 </script>
 <style lang="scss" scoped>
 @import "./../../node_modules/bulma/css/bulma.css";

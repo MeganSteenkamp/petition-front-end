@@ -1,7 +1,9 @@
 <template>
   <div class="petitions">
     <div class="title">
-      <h3><strong>View Petitions</strong></h3>
+      <h3>
+        <strong>View Petitions</strong>
+      </h3>
     </div>
     <div class="search">
       <h3>Refine search</h3>
@@ -18,7 +20,7 @@
       </select>
     </div>
 
-    <div v-if="petitions && petitions.length > 0">
+    <div v-if="petitions && sortedPetitions.length > 0">
       <div id="petitions">
         <div v-for="petition in sortedPetitions" :key="petition.petitionId" class="petition">
           <router-link
@@ -30,6 +32,15 @@
             <PetitionCard :petition="petition" />
           </router-link>
         </div>
+      </div>
+    </div>
+    <div v-if="petitions && sortedPetitions.length == 0">
+      <div class="empty-petitions">
+        <div class="subtitle is-size-2">
+          <strong>We currently have no petitions.</strong>
+        </div>
+        <div class="subtitle">Is there something you want to change?</div>
+        <router-link class="tag is-danger is-large" to="/start-a-petition">Start a petition</router-link>
       </div>
     </div>
   </div>
@@ -49,11 +60,10 @@ export default {
     return {
       sort: "SIGNATURES_DESC",
       search: "",
-      filter: this.$route.query.category || "",
-      authorFilter: this.$route.query.author || ""
+      filter: this.$route.query.category || ""
     };
   },
-  mounted() {
+  mounted: function() {
     this.loadPetitions();
   },
   methods: {
@@ -74,9 +84,6 @@ export default {
       }
       if (this.filter) {
         reduced = reduced.filter(p => p.category === this.filter);
-      }
-      if (this.author) {
-        reduced = reduced.filter(p => p.authorName === this.author);
       }
       return reduced;
     },
@@ -130,11 +137,24 @@ export default {
 }
 .search {
   padding-left: 60px;
+  padding-bottom: 30px;
 }
 .petition {
   padding-top: 20px;
   padding-bottom: 20px;
   padding-left: 280px;
   padding-right: 280px;
+}
+.empty-petitions {
+  padding: 10px 10px 10px 10px;
+  text-align: center;
+  border-radius: 25px;
+  background-color: whitesmoke;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  height: 200px;
+  justify-content: center;
+  align-items: center;
 }
 </style>

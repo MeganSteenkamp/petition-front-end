@@ -1,6 +1,6 @@
 <template>
   <div class="category-card">
-    <div class="dot">
+    <div class="card">
       <h2 class="title is-size-4 has-text-weight-bold">{{ category.name }}</h2>
     </div>
   </div>
@@ -13,17 +13,18 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.dot {
-  height: 250px;
-  width: 250px;
-  background-color: #ff3860;
-  border-radius: 50%;
+.card {
+  height: 200px;
+  background-color:hsl(0, 0%, 86%);
+  border-radius: 25px;
   display: flex;
   justify-content: center;
   align-items: center;
 }
 .title {
-  text-shadow: 4px 4px 4px rgba(0, 0, 0, 0.7);
-  color: whitesmoke;
+  text-shadow: 1px 1px 1x rgba(0, 0, 0, 0.7);
+  color:white;
+  justify-content: center;
+  align-self: center;
 }
 </style>

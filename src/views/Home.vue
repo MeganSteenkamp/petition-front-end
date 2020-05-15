@@ -9,7 +9,9 @@
       </div>
     </section>
     <h2 class="category-subtitle">Browse categories</h2>
-    <CategoriesList />
+    <div class="category">
+      <CategoriesList />
+    </div>
   </div>
 </template>
 
@@ -38,15 +40,17 @@ export default {
   font-size: 60px;
 }
 .subtitle {
-  text-shadow: 4px 4px 4px rgba(0, 0, 0, 0.7);
+  font-weight: bold;
+  text-shadow: 2px 2px 2px rgba(0, 0, 0, 0.7);
   font-size: 30px;
 }
 .category-subtitle {
-  padding-top: 50px;
+  font-weight: bold;
+  text-decoration: none;
+  color: #2c3e50;
+  padding-top: 70px;
   text-align: center;
   font-size: 30px;
-  font-weight: bold;
-  color: #2c3e50;
 }
 .button-block {
   text-align: center;
