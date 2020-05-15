@@ -5,14 +5,7 @@
       <div class="field" for="title">
         <label class="required">Title</label>
         <div class="control">
-          <input
-            class="input"
-            type="text"
-            placeholder="Title"
-            v-model="title"
-            required
-            autofocus
-          />
+          <input class="input" type="text" placeholder="Title" v-model="title" required autofocus />
         </div>
       </div>
 
@@ -34,19 +27,12 @@
         <label class="required">Category</label>
         <div class="control">
           <div class="select">
-            <select
-              id="categories"
-              name="dropdown"
-              v-model="selectedCategory"
-              required
-              autofocus
-            >
+            <select id="categories" name="dropdown" v-model="selectedCategory" required autofocus>
               <option
                 v-for="category in categories"
                 :key="category.categoryId"
                 :value="category.categoryId"
-                >{{ category.name }}</option
-              >
+              >{{ category.name }}</option>
             </select>
           </div>
         </div>
@@ -56,6 +42,13 @@
         <label class="label">Closing date</label>
         <div class="control">
           <date-picker v-model="closingDate" type="date" />
+        </div>
+      </div>
+
+      <div class="field" for="image">
+        <label class="required">Hero image</label>
+        <div class="control">
+          <input type="file" accept="image/*" @change="bindImage" id="hero-image" required autofocus />
         </div>
       </div>
 
@@ -70,9 +63,7 @@
 
       <div class="field">
         <ul>
-          <li class="error" v-for="error in errors" v-bind:key="error">
-            {{ error }}
-          </li>
+          <li class="error" v-for="error in errors" v-bind:key="error">{{ error }}</li>
         </ul>
       </div>
     </form>
@@ -85,8 +76,7 @@ import { mapGetters, mapActions } from "vuex";
 import Moment from "moment";
 import DatePicker from "vue2-datepicker";
 import "vue2-datepicker/index.css";
-
-// TODO: Allow photo uploads
+import api from "../api";
 
 export default {
   components: { DatePicker },
@@ -137,14 +127,20 @@ export default {
         data.closingDate = Moment(this.closingDate).format("YYYY-MM-DD");
       }
       try {
-        await this.createPetition(data);
+        let petitionId = await this.createPetition(data);
+        await api.uploadFile(`petitions/${petitionId}/photo`, this.image);
+        await api.post(`petitions/${petitionId}/signatures`, {});
+        this.$router.push(`/petition/${petitionId}`);
       } catch (e) {
         this.errors.push(e.message);
       }
+    },
+    bindImage() {
+      this.image = event.target.files[0];
     }
   },
   computed: {
-    ...mapGetters(["categories"])
+    ...mapGetters(["categories", "petition"])
   }
 };
 </script>

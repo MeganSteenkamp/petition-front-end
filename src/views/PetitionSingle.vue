@@ -63,7 +63,7 @@ export default {
   methods: {
     ...mapActions(["loadPetition", "loadSignatures"]),
     getImageUrl(p) {
-      return `http://csse-s365.canterbury.ac.nz:4001/api/v1/petitions/${p.petitionId}/photo`;
+      return `http://localhost:4941/api/v1/petitions/${p.petitionId}/photo`;
     }
   },
   filters: {
@@ -93,7 +93,8 @@ export default {
 }
 .container {
   &__image {
-    width: 380px;
+    max-height: 200px;
+    max-width: 380px;
     float: right;
   }
   &__text {

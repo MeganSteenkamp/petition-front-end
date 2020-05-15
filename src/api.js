@@ -7,8 +7,8 @@ const baseUrl = useLocal
 
 const TOKEN_STORAGE_NAME = "user_auth_token";
 const USER_ID_STORAGE_NAME = "user_id";
-
 const TOKEN_HEADER_NAME = "X-Authorization";
+const CONTENT_HEADER_NAME = "Content-Type";
 
 export const getAuthToken = () => {
   return localStorage.getItem(TOKEN_STORAGE_NAME);
@@ -28,7 +28,19 @@ const getAuthHeader = () => {
   };
 };
 
+export function getFileUploadHeader(data) {
+  const token = getAuthToken();
+  if (!token) {
+    return {};
+  }
+  return {
+    [TOKEN_HEADER_NAME]: token,
+    [CONTENT_HEADER_NAME]: data.type
+  };
+};
+
 const api = {
+  
   setUserAndToken(id, token) {
     localStorage.setItem(USER_ID_STORAGE_NAME, id);
     localStorage.setItem(TOKEN_STORAGE_NAME, token);
@@ -39,6 +51,13 @@ const api = {
   clearUserAndToken() {
     localStorage.removeItem(USER_ID_STORAGE_NAME);
     localStorage.removeItem(TOKEN_STORAGE_NAME);
+  },
+  async uploadFile(resource, data) {
+    const fileHeader = getFileUploadHeader(data);
+    const result = await axios.put(`${baseUrl}${resource}`, data, {
+      headers: fileHeader,
+    });
+    return result.data;
   },
   async post(resource, data) {
     const result = await axios.post(`${baseUrl}${resource}`, data, {

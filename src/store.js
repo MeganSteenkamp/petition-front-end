@@ -58,8 +58,9 @@ const store = new Vuex.Store({
         commit("setUser", user);
       }
     },
-    async createPetition({}, petition) {
-      await api.post("petitions", petition);
+    async createPetition({ commit, dispatch }, petition) {
+      const result = await api.post("petitions", petition);
+      return result.petitionId;
     },
     async loadSignatures({ commit }, id) {
       const signatures = await api.get(`petitions/${id}/signatures`);
