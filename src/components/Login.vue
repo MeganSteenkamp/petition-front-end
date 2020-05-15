@@ -10,13 +10,27 @@
 
       <div class="field" for="email">
         <div class="control">
-          <input class="input" type="email" placeholder="Email address" v-model="email" required autofocus/>
+          <input
+            class="input"
+            type="email"
+            placeholder="Email address"
+            v-model="email"
+            required
+            autofocus
+          />
         </div>
       </div>
 
       <div class="field" for="password">
         <div class="control">
-          <input class="input" type="password" placeholder="Password" v-model="password" required autofocus/>
+          <input
+            class="input"
+            type="password"
+            placeholder="Password"
+            v-model="password"
+            required
+            autofocus
+          />
         </div>
       </div>
 
@@ -51,8 +65,12 @@ export default {
         email: this.email,
         password: this.password
       };
-      await this.login(details);
-      this.$router.push("/");
+      try {
+        await this.login(details);
+        this.$router.push("/");
+      } catch (e) {
+        this.errors.push(e.message);
+      }
     }
   }
 };

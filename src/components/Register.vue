@@ -9,14 +9,7 @@
     <form @submit.prevent="submit">
       <div class="field" for="name">
         <div class="control">
-          <input
-            class="input"
-            type="text"
-            placeholder="Name"
-            v-model="name"
-            required
-            autofocus
-          />
+          <input class="input" type="text" placeholder="Name" v-model="name" required autofocus />
         </div>
       </div>
 
@@ -111,10 +104,13 @@ export default {
         password: this.password
       };
 
-      await this.register(user);
-      await this.login(user);
-
-      this.$router.push("/");
+      try {
+        await this.register(user);
+        await this.login(user);
+        this.$router.push("/");
+      } catch (e) {
+        this.errors.push(e.message);
+      }
     }
   }
 };

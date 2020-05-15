@@ -54,6 +54,7 @@
 import Vue from "vue";
 import { mapGetters, mapActions } from "vuex";
 import Moment from "moment";
+import api from "./../api";
 
 export default {
   mounted() {
@@ -63,7 +64,7 @@ export default {
   methods: {
     ...mapActions(["loadPetition", "loadSignatures"]),
     getImageUrl(p) {
-      return `http://localhost:4941/api/v1/petitions/${p.petitionId}/photo`;
+      return api.endpoint(`petitions/${p.petitionId}/photo`);
     }
   },
   filters: {
