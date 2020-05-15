@@ -89,7 +89,7 @@ export default {
       return {
         backgroundColor: categoryColorMap[p.category] || "grey"
       };
-    }
+    },
   },
   computed: {
     ...mapGetters(["petitions"]),

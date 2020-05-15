@@ -8,6 +8,7 @@
         </div>
       </div>
     </section>
+    <h2 class="category-subtitle">Browse categories</h2>
     <CategoriesList />
   </div>
 </template>
@@ -24,7 +25,7 @@ export default {
 <style lang="scss" scoped>
 .hero {
   text-align: center;
-  background-image: url("./../assets/banner.jpg");
+  background-color: hsl(171, 100%, 41%);
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
@@ -37,6 +38,11 @@ export default {
 }
 .subtitle {
   text-shadow: 4px 4px 4px rgba(0, 0, 0, 0.7);
+  font-size: 30px;
+}
+.category-subtitle {
+  padding-top: 50px;
+  text-align: center;
   font-size: 30px;
 }
 .button-block {

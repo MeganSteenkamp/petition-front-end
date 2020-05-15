@@ -1,12 +1,11 @@
 <template>
   <div class="categories">
-    <h2 class="subtitle is-3">Browse categories</h2>
     <div class="columns is-multiline">
       <div
         v-for="category in categories.slice(0,6)"
         :category="category"
         :key="category.categoryId"
-        class="column is-one-third"
+        class="column"
       >
         <router-link :to="{name: 'petitions', query: {category: category.name}}">
           <CategoryCard :category="category" />
@@ -28,9 +27,9 @@ export default {
   components: {
     CategoryCard
   },
-   data() {
+  data() {
     return {
-      selectedCategory: "",
+      selectedCategory: ""
     };
   },
   mounted: function() {
@@ -48,5 +47,7 @@ export default {
 .categories {
   margin-top: 100px;
   text-align: center;
+  justify-content: center;
+  align-items: center;
 }
 </style>
