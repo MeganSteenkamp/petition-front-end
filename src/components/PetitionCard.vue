@@ -10,7 +10,7 @@
       </div>
     </div>
     <div class="card-image">
-      <img class="image text-right" :src="getImageUrl(petition)" alt="Image" />
+      <img class="image" :src="getImageUrl(petition)" alt="Image" />
     </div>
   </div>
 </template>

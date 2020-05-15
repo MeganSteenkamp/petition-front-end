@@ -6,42 +6,42 @@
           <img class="container__image" :src="getImageUrl(petition)" />
           <div class="container__text">
             <h1 class="title">{{ petition.title }}</h1>
-            <br />
-            <h2 class="subtitle">
-              <strong>Category:</strong>
-              {{ petition.category }}
+            <h2 class="title is-6">
+              {{ petition.authorName }} started this petition
               <br />
-              <strong>Author:</strong>
-              {{ petition.authorName }}
+              <div class="tag is-medium" :style="labelStyle(petition)">{{ petition.category }}</div>
+              <br />
+              <br />
             </h2>
+            <p class="is-size-8">
+              Start date:
+              {{ petition.createdDate | moment }}
+            </p>
+            <p class="is-size-8">
+              Closing date:
+              {{ petition.closingDate | moment}}
+            </p>
+            <p class="is-size-8">
+              Signatures:
+              {{ petition.signatureCount }}
+            </p>
           </div>
         </div>
       </div>
     </section>
     <section class="petition-content">
-      <div class="container">
-        <p class="is-size-5 description">
-          <strong>Description:</strong>
-          {{ petition.description }}
-        </p>
-        <p class="is-size-5">
-          <strong>Signatures:</strong>
-          {{ petition.signatureCount }}
-        </p>
-        <p class="is-size-5">
-          <strong>Start date:</strong>
-          {{ petition.createdDate | moment }}
-        </p>
-        <p class="is-size-5">
-          <strong>Closing date:</strong>
-          {{ petition.closingDate | moment}}
-        </p>
-        <br>
-        <h2><Strong>Signatories:</strong></h2>
-        <div v-if="signatures && signatures.length > 0">
-          <div id="signatures">
-            <div v-for="signature in signatures" :key="signature.signatoryId" class="petition">
-              <li>{{ signature.name }}</li>
+      <div class="columns">
+        <div class="column is-two-thirds">
+          <p class="description">{{ petition.description }}</p>
+          <br />
+        </div>
+        <div class="column is-one-third">
+          <div class="subtitle">Signatories:</div>
+          <div v-if="signatures && signatures.length > 0">
+            <div id="signatures">
+              <div v-for="signature in signatures" :key="signature.signatoryId" class="signatures">
+                <SignatoryCard :signatory="signature" />
+              </div>
             </div>
           </div>
         </div>
@@ -55,8 +55,12 @@ import Vue from "vue";
 import { mapGetters, mapActions } from "vuex";
 import Moment from "moment";
 import api from "./../api";
+import SignatoryCard from "./../components/SignatoryCard";
 
 export default {
+  components: {
+    SignatoryCard
+  },
   mounted: function() {
     this.loadPetition(this.petitionId);
     this.loadSignatures(this.petitionId);
@@ -65,6 +69,18 @@ export default {
     ...mapActions(["loadPetition", "loadSignatures"]),
     getImageUrl(p) {
       return api.endpoint(`petitions/${p.petitionId}/photo`);
+    },
+    labelStyle(p) {
+      const categoryColorMap = {
+        Entertainment: "#fff6a3",
+        Immigration: "#daffa3",
+        Animals: "#ffc8a3",
+        Environment: "#c8a3ff",
+        "Human rights": "#a3acff"
+      };
+      return {
+        backgroundColor: categoryColorMap[p.category] || "grey"
+      };
     }
   },
   filters: {
@@ -76,8 +92,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(["petition"]),
-    ...mapGetters(["signatures"]),
+    ...mapGetters(["petition", "signatures"]),
     petitionId() {
       return this.$route && this.$route.params.petitionId;
     }
@@ -91,22 +106,31 @@ export default {
 }
 .hero {
   margin-bottom: 70px;
+  border-radius: 25px;
+}
+.title {
+  line-height: 40px;
 }
 .container {
   &__image {
-    max-height: 200px;
-    max-width: 380px;
+    max-height: 300px;
+    max-width: 500px;
     float: right;
   }
   &__text {
     display: inline;
   }
-  margin-bottom: 70px;
 }
 .image {
   margin-top: 50px;
 }
 .description {
   margin-bottom: 30px;
+  padding-left: 30px;
+  padding-right: 60px;
+}
+.signatures {
+  padding-top: 10px;
+  padding-bottom: 10px;
 }
 </style>
