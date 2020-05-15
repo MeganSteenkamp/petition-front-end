@@ -39,7 +39,7 @@
       </div>
 
       <div class="field" for="closingDate">
-        <label class="label">Closing date</label>
+        <label>Closing date</label>
         <div class="control">
           <date-picker v-model="closingDate" type="date" />
         </div>
@@ -48,7 +48,7 @@
       <div class="field" for="image">
         <label class="required">Hero image</label>
         <div class="control">
-          <input type="file" accept="image/*" @change="bindImage" id="hero-image" required autofocus />
+          <input type="file" accept="image/png,image/jpeg,image/gif" @change="bindImage" id="hero-image" required autofocus />
         </div>
       </div>
 

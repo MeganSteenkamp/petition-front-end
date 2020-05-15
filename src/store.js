@@ -32,7 +32,8 @@ const store = new Vuex.Store({
   },
   actions: {
     async register({}, user) {
-      await api.post("users/register", user);
+      const result = await api.post("users/register", user);
+      return result.userId;
     },
     async login({ dispatch }, user) {
       let result = await api.post("users/login", user);

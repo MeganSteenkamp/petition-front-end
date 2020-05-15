@@ -64,7 +64,7 @@ export default {
 .card.is-horizontal .image {
   border-radius: 25px;
   height: 200px;
-  width: 400px;
+  width: 300px;
   object-fit: cover;
 }
 .card.is-horizontal .card-content {

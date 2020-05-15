@@ -1,11 +1,6 @@
 <template>
   <div class="petitions">
-    <div class="title">
-      <h3>
-        <strong>My Petitions</strong>
-      </h3>
-    </div>
-
+    <h1 class="title">My petitions</h1>
     <div v-if="user && petitions && sortedPetitions.length > 0">
       <div id="petitions">
         <div v-for="petition in sortedPetitions" :key="petition.petitionId" class="petition">
@@ -73,8 +68,6 @@ export default {
 
 <style lang="scss" scoped>
 .title {
-  padding-left: 60px;
-  font-weight: bold;
   color: #2c3e50;
 }
 .search {
@@ -83,8 +76,8 @@ export default {
 .petition {
   padding-top: 20px;
   padding-bottom: 20px;
-  padding-left: 280px;
-  padding-right: 280px;
+  padding-left: 240px;
+  padding-right: 240px;
 }
 .empty-petitions {
   padding: 10px 10px 10px 10px;

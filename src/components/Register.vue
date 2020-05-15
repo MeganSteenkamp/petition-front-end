@@ -8,12 +8,14 @@
     <h1 class="title">Register</h1>
     <form @submit.prevent="submit">
       <div class="field" for="name">
+        <label class="required">Name</label>
         <div class="control">
           <input class="input" type="text" placeholder="Name" v-model="name" required autofocus />
         </div>
       </div>
 
       <div class="field" for="email">
+        <label class="required">Email address</label>
         <div class="control">
           <input
             class="input"
@@ -26,7 +28,41 @@
         </div>
       </div>
 
+      <div class="field" for="city">
+        <label>City</label>
+        <div class="control">
+          <input
+            class="input"
+            type="text"
+            placeholder="City"
+            v-model="city"
+            autofocus
+          />
+        </div>
+      </div>
+
+      <div class="field" for="country">
+        <label>Country</label>
+        <div class="control">
+          <input
+            class="input"
+            type="text"
+            placeholder="Country"
+            v-model="country"
+            autofocus
+          />
+        </div>
+      </div>
+
+      <div class="field" for="image">
+        <label>Profile picture</label>
+        <div class="control">
+          <input type="file" accept="image/png,image/jpeg,image/gif" @change="bindImage" id="profile-picture" autofocus />
+        </div>
+      </div>
+
       <div class="field" for="password">
+        <label class="required">Password</label>
         <div class="control">
           <input
             class="input"
@@ -40,6 +76,7 @@
       </div>
 
       <div class="field" for="password_confirmation">
+        <label class="required">Confirm password</label>
         <div class="control">
           <input
             class="input"
@@ -69,6 +106,7 @@
 <script>
 import Vue from "vue";
 import { mapGetters, mapActions } from "vuex";
+import api from "../api";
 
 export default {
   data() {
@@ -76,12 +114,18 @@ export default {
       errors: [],
       name: "",
       email: "",
+      city: null,
+      country: null,
       password: "",
-      password_confirmation: ""
+      password_confirmation: "",
+      image: null
     };
   },
   methods: {
     ...mapActions(["register", "login"]),
+    bindImage() {
+      this.image = event.target.files[0];
+    },
     validateForm() {
       this.errors = [];
 
@@ -104,14 +148,39 @@ export default {
         password: this.password
       };
 
+      if (this.city) {
+        user.city = this.city;
+      }
+
+      if (this.country) {
+        user.country = this.country;
+      }
+
       try {
-        await this.register(user);
+        let userId = await this.register(user);
         await this.login(user);
+        await api.uploadFile(`users/${userId}/photo`, this.image);
         this.$router.push("/");
       } catch (e) {
-        this.errors.push(e.message);
+        this.errors.push("Email is already in use");
       }
     }
   }
 };
 </script>
+
+<style>
+.required:after {
+  content: " *";
+  color: red;
+}
+.error {
+  border: 1px solid red;
+  color: red;
+  border-radius: 5px;
+  padding: 5px;
+}
+.label {
+  text-align: left;
+}
+</style>

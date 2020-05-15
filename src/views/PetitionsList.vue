@@ -1,10 +1,6 @@
 <template>
   <div class="petitions">
-    <div class="title">
-      <h3>
-        <strong>View Petitions</strong>
-      </h3>
-    </div>
+    <h1 class="title">View petitions</h1>
     <div class="search">
       <h3>Refine search</h3>
       <input v-model="search" placeholder="Search titles" />
@@ -130,20 +126,14 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.title {
-  padding-left: 60px;
-  font-weight: bold;
-  color: #2c3e50;
-}
 .search {
-  padding-left: 60px;
   padding-bottom: 30px;
 }
 .petition {
   padding-top: 20px;
   padding-bottom: 20px;
-  padding-left: 280px;
-  padding-right: 280px;
+  padding-left: 240px;
+  padding-right: 240px;
 }
 .empty-petitions {
   padding: 10px 10px 10px 10px;
