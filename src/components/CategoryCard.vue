@@ -15,6 +15,7 @@ export default {
 <style lang="scss" scoped>
 .card {
   height: 200px;
+  background-image: url('./../assets/hero-image.jpg');
   background-color:hsl(0, 0%, 86%);
   border-radius: 25px;
   display: flex;

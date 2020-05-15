@@ -71,6 +71,12 @@ const api = {
     });
     return result.data;
   },
+  async delete(resource) {
+    const result = await axios.delete(`${baseUrl}${resource}`, {
+      headers: getAuthHeader()
+    });
+    return result;
+  },
   endpoint(resource) {
     return `${baseUrl}${resource}`;
   }

@@ -1,7 +1,7 @@
 <template>
   <div class="card is-horizontal">
     <div class="card-image">
-      <img class="image" :src="getImageUrl(signatory)" />
+      <img class="image" :src="getImageUrl(signatory)" onerror="this.onerror=null;this.src='https://upload.wikimedia.org/wikipedia/commons/8/89/Portrait_Placeholder.png'" />
     </div>
     <div class="card-content">
       <div class="name is-size-5">{{ signatory.name | capitalize }}</div>

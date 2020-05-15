@@ -2,13 +2,13 @@
   <div class="petitions">
     <h1 class="title">View petitions</h1>
     <div class="search">
-      <h3>Refine search</h3>
+      <h3><strong>Refine search</strong></h3>
       <input v-model="search" placeholder="Search titles" />
       <select class="dropdown is-active" v-model="filter" placeholder="filter">
         <option value>All categories</option>
         <option v-for="category in categories" :key="category">{{ category }}</option>
       </select>
-      <select v-model="sort" placeholder="Sort">
+      <select class="dropdown is-active" v-model="sort" placeholder="Sort">
         <option value="ALPHABETICAL_ASC">Title A to Z</option>
         <option value="ALPHABETICAL_DESC">Title Z to A</option>
         <option value="SIGNATURES_ASC">Signatures Low to High</option>
@@ -128,6 +128,7 @@ export default {
 <style lang="scss" scoped>
 .search {
   padding-bottom: 30px;
+  line-height: 19px;
 }
 .petition {
   padding-top: 20px;

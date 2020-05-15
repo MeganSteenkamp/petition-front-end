@@ -28,6 +28,7 @@ export default {
 .hero {
   text-align: center;
   border-radius: 25px;
+  background-image: url('./../assets/hero-image.jpg');
   background-color: hsl(171, 100%, 41%);
   background-size: cover;
   background-position: center;
@@ -36,7 +37,7 @@ export default {
 }
 .hero-body .title {
   text-shadow: 4px 4px 4px rgba(0, 0, 0, 0.6);
-  padding: 60px 0 20px 0;
+  padding: 80px 0 20px 0;
   font-size: 60px;
 }
 .subtitle {

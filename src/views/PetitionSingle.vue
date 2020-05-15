@@ -1,6 +1,6 @@
 <template>
   <div class="petition-single">
-    <section class="hero is-primary">
+    <section class="hero is-light">
       <div class="hero-body">
         <div class="container">
           <img class="container__image" :src="getImageUrl(petition)" />
@@ -33,14 +33,42 @@
       <div class="columns">
         <div class="column is-two-thirds">
           <p class="description">{{ petition.description }}</p>
-          <br />
-        </div>
-        <div class="column is-one-third">
-          <div class="subtitle">Signatories:</div>
           <div v-if="signatures && signatures.length > 0">
             <div id="signatures">
+              <h4><strong>Signatories:</strong></h4>
               <div v-for="signature in signatures" :key="signature.signatoryId" class="signatures">
                 <SignatoryCard :signatory="signature" />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="column is-one-third">
+          <button
+            v-if="this.user && closingDateIsValid(petition) &&!isAuthor(petition) && !hasSigned(signatures)"
+            class="button is-danger is-rounded is-medium is-fullwidth"
+            @click="signPetition(petition)"
+          >Sign this petition</button>
+          <button
+            v-if="this.user && closingDateIsValid(petition) &&!isAuthor(petition) && hasSigned(signatures)"
+            class="button is-dark is-rounded is-medium is-fullwidth"
+            @click="removeSignature(petition)"
+          >Remove signature</button>
+          <router-link v-if="!this.user && closingDateIsValid(petition)" :to="{ name: 'login' }">
+            <button
+              class="button is-danger is-rounded is-medium is-fullwidth"
+            >Sign in to sign this petition</button>
+          </router-link>
+          <br />
+          <button class="button is-link is-rounded is-medium is-fullwidth">Share</button>
+          <br />
+          <div v-if="signatures && signatures.length > 0">
+            <div id="signatures">
+              <h4><strong>Author:</strong></h4>
+              <div v-for="signature in signatures" :key="signature.signatoryId" class="signatures">
+                <div v-if="petition.authorName == signature.name">
+                  <SignatoryCard :signatory="signature" />
+                </div>
               </div>
             </div>
           </div>
@@ -62,13 +90,33 @@ export default {
     SignatoryCard
   },
   mounted: function() {
+    this.loadUser();
     this.loadPetition(this.petitionId);
     this.loadSignatures(this.petitionId);
   },
   methods: {
-    ...mapActions(["loadPetition", "loadSignatures"]),
+    ...mapActions(["loadUser", "loadPetition", "loadSignatures"]),
     getImageUrl(p) {
       return api.endpoint(`petitions/${p.petitionId}/photo`);
+    },
+    closingDateIsValid(p) {
+      const today = Moment();
+      const closingDate = Moment(p.closingDate);
+      if (closingDate > today) {
+        return true;
+      }
+    },
+    hasSigned(s) {
+      for (const signature of s) {
+        if(signature.name == this.user.name) {
+          return true;
+        }
+      }
+    },
+    isAuthor(p) {
+      if(p.authorName === this.user.name) {
+        return true;
+      }
     },
     labelStyle(p) {
       const categoryColorMap = {
@@ -81,6 +129,14 @@ export default {
       return {
         backgroundColor: categoryColorMap[p.category] || "grey"
       };
+    },
+    async signPetition(p) {
+      await api.post(`petitions/${p.petitionId}/signatures`, {});
+      await this.loadSignatures(this.petitionId);
+    },
+    async removeSignature(p) {
+      await api.delete(`petitions/${p.petitionId}/signatures`, {});
+      await this.loadSignatures(this.petitionId);
     }
   },
   filters: {
@@ -92,7 +148,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(["petition", "signatures"]),
+    ...mapGetters(["petition", "signatures", "user"]),
     petitionId() {
       return this.$route && this.$route.params.petitionId;
     }
