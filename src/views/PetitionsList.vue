@@ -1,13 +1,14 @@
 <template>
   <div class="petitions">
-    <div>
-      <h3>Search and Filter</h3>
-      <input v-model="search" placeholder="search" />
-      <select v-model="filter" placeholder="filter">
+    <div class="title">
+      <h3><strong>View Petitions</strong></h3>
+    </div>
+    <div class="search">
+      <h3>Refine search</h3>
+      <input v-model="search" placeholder="Search titles" />
+      <select class="dropdown is-active" v-model="filter" placeholder="filter">
         <option value>All categories</option>
-        <option v-for="category in categories" :key="category">
-          {{ category }}
-        </option>
+        <option v-for="category in categories" :key="category">{{ category }}</option>
       </select>
       <select v-model="sort" placeholder="Sort">
         <option value="ALPHABETICAL_ASC">Title A to Z</option>
@@ -17,38 +18,16 @@
       </select>
     </div>
 
-    <div>
-      <h3>View Petitions</h3>
-    </div>
     <div v-if="petitions && petitions.length > 0">
       <div id="petitions">
-        <div
-          v-for="petition in sortedPetitions"
-          :key="petition.petitionId"
-          class="petition"
-        >
+        <div v-for="petition in sortedPetitions" :key="petition.petitionId" class="petition">
           <router-link
             :to="{
               name: 'petition',
               params: { petitionId: petition.petitionId }
             }"
           >
-            <img class="image" :src="getImageUrl(petition)" />
-            <div class="body">
-              <div class="title">
-                {{ petition.title | capitalize }}
-              </div>
-              <div class="subtitle">
-                <div class="category" :style="labelStyle(petition)">
-                  {{ petition.category }}
-                </div>
-                .
-                <div class="author">{{ petition.authorName }}</div>
-              </div>
-              <p class="signatures">
-                Signatures: {{ petition.signatureCount }}
-              </p>
-            </div>
+            <PetitionCard :petition="petition" />
           </router-link>
         </div>
       </div>
@@ -60,8 +39,12 @@
 import Vue from "vue";
 import { mapGetters, mapActions } from "vuex";
 import api from "../api";
+import PetitionCard from "./../components/PetitionCard";
 
 export default {
+  components: {
+    PetitionCard
+  },
   data() {
     return {
       sort: "SIGNATURES_DESC",
@@ -74,22 +57,7 @@ export default {
     this.loadPetitions();
   },
   methods: {
-    ...mapActions(["loadPetitions"]),
-    getImageUrl(p) {
-      return api.endpoint(`petitions/${p.petitionId}/photo`);
-    },
-    labelStyle(p) {
-      const categoryColorMap = {
-        Entertainment: "#fff6a3",
-        Immigration: "#daffa3",
-        Animals: "#ffc8a3",
-        Environment: "#c8a3ff",
-        "Human rights": "#a3acff"
-      };
-      return {
-        backgroundColor: categoryColorMap[p.category] || "grey"
-      };
-    },
+    ...mapActions(["loadPetitions"])
   },
   computed: {
     ...mapGetters(["petitions"]),
@@ -150,48 +118,23 @@ export default {
       const categories = this.petitions.map(p => p.category);
       return categories.filter((v, i) => categories.indexOf(v) === i);
     }
-  },
-  filters: {
-    capitalize(value) {
-      if (!value) return "";
-      value = value.toString();
-      return value.charAt(0).toUpperCase() + value.slice(1);
-    }
   }
 };
 </script>
 
 <style lang="scss" scoped>
-.petitions {
-  .petition {
-    display: flex;
-    border: 1px solid black;
-    margin: 10px;
-    .image {
-      width: 200px;
-      height: 100px;
-    }
-    .body {
-      margin: 5px 10px;
-      .title {
-        font-size: 15px;
-        font-weight: 600;
-      }
-      .subtitle {
-        display: flex;
-        .category {
-          width: fit-content;
-          border: 1px solid gray;
-          border-radius: 5px;
-          padding: 3px;
-          margin-right: 3px;
-        }
-        .author {
-          padding: 3px;
-          font-style: italic;
-        }
-      }
-    }
-  }
+.title {
+  padding-left: 60px;
+  font-weight: bold;
+  color: #2c3e50;
+}
+.search {
+  padding-left: 60px;
+}
+.petition {
+  padding-top: 20px;
+  padding-bottom: 20px;
+  padding-left: 280px;
+  padding-right: 280px;
 }
 </style>
