@@ -25,6 +25,7 @@ export default {
 <style lang="scss" scoped>
 .hero {
   text-align: center;
+  border-radius: 25px;
   background-color: hsl(171, 100%, 41%);
   background-size: cover;
   background-position: center;
@@ -44,6 +45,8 @@ export default {
   padding-top: 50px;
   text-align: center;
   font-size: 30px;
+  font-weight: bold;
+  color: #2c3e50;
 }
 .button-block {
   text-align: center;
