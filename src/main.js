@@ -9,6 +9,7 @@ import Petition from "./views/PetitionSingle";
 import Petitions from "./views/PetitionsList";
 import MyPetitions from "./views/MyPetitions";
 import PetitionCreate from "./components/PetitionCreate";
+import PetitionEdit from "./components/PetitionEdit";
 import Login from "./components/Login";
 import Register from "./components/Register";
 import store from "./store";
@@ -33,6 +34,11 @@ const routes = [
     path: "/petition/:petitionId",
     name: "petition",
     component: Petition
+  },
+  {
+    path: "/petition/edit/:petitionId",
+    name: "edit-petition",
+    component: PetitionEdit
   },
   {
     path: "/petitions",

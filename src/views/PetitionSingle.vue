@@ -57,6 +57,20 @@
             class="button is-dark is-rounded is-medium is-fullwidth"
             @click="removeSignature(petition)"
           >Remove signature</button>
+          <router-link
+            v-if="this.user && closingDateIsValid(petition) &&isAuthor(petition)"
+            :to="{
+              name: 'edit-petition',
+              params: { petitionId: petition.petitionId }
+            }"
+          >
+            <button class="button is-info is-rounded is-medium is-fullwidth">Edit petition</button>
+          </router-link>
+          <button
+            v-if="this.user && closingDateIsValid(petition) &&isAuthor(petition)"
+            class="button is-warning is-rounded is-medium is-fullwidth"
+            @click="deletePetition(petition)"
+          >Delete petition</button>
           <router-link v-if="!this.user && closingDateIsValid(petition)" :to="{ name: 'login' }">
             <button
               class="button is-danger is-rounded is-medium is-fullwidth"
@@ -116,7 +130,7 @@ export default {
   data() {
     return {
       sharing: {
-        url: "https://www.parliament.nz/en/pb/petitions/",
+        url: "http://www.parliament.nz/en/pb/petitions/",
         hashtags: "vuejs,seng365,petition,makeachange",
         twitterUser: "meganspetitionsite"
       },
@@ -165,6 +179,15 @@ export default {
         return true;
       }
     },
+    async deletePetition(p) {
+      const answer = confirm(
+        "Are you sure you want to delete this petition? If you confirm it will be permanently deleted"
+      );
+      if (answer) {
+        await api.delete(`petitions/${p.petitionId}`);
+        this.$router.push("/petitions");
+      }
+    },
     labelStyle(p) {
       const categoryColorMap = {
         Entertainment: "#fff6a3",
@@ -180,10 +203,12 @@ export default {
     async signPetition(p) {
       await api.post(`petitions/${p.petitionId}/signatures`, {});
       await this.loadSignatures(this.petitionId);
+      await this.loadPetition(this.petitionId);
     },
     async removeSignature(p) {
       await api.delete(`petitions/${p.petitionId}/signatures`, {});
       await this.loadSignatures(this.petitionId);
+      await this.loadPetition(this.petitionId);
     }
   },
   filters: {
@@ -204,6 +229,9 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.button {
+  margin-bottom: 20px;
+}
 .tag {
   width: 120px;
   margin-right: 10px;
