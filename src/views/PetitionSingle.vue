@@ -35,10 +35,13 @@
           <p class="description">{{ petition.description }}</p>
           <div v-if="signatures && signatures.length > 0">
             <div id="signatures">
-              <h4><strong>Signatories:</strong></h4>
-              <div v-for="signature in signatures" :key="signature.signatoryId" class="signatures">
+              <h4>
+                <strong>Signatories:</strong>
+              </h4>
+              <a v-for="signature in signatures" :key="signature.signatoryId" class="signatures">
                 <SignatoryCard :signatory="signature" />
-              </div>
+                <br />
+              </a>
             </div>
           </div>
         </div>
@@ -60,16 +63,34 @@
             >Sign in to sign this petition</button>
           </router-link>
           <br />
-          <button class="button is-link is-rounded is-medium is-fullwidth">Share</button>
+          <h4>
+            <strong>Share via social media:</strong>
+          </h4>
+          <ShareNetwork
+            v-for="network in networks"
+            :network="network.network"
+            :key="network.key"
+            :url="sharing.url"
+            :title="petition.title"
+            :description="petition.description"
+            :quote="petition.description"
+            :hashtags="sharing.hashtags"
+            :twitterUser="sharing.twitterUser"
+          >
+            <div class="tag is-medium is-link">{{ network.name }}</div>
+          </ShareNetwork>
           <br />
           <div v-if="signatures && signatures.length > 0">
-            <div id="signatures">
-              <h4><strong>Author:</strong></h4>
-              <div v-for="signature in signatures" :key="signature.signatoryId" class="signatures">
+            <div id="author">
+              <h4>
+                <br />
+                <strong>Author:</strong>
+              </h4>
+              <a v-for="signature in signatures" :key="signature.signatoryId" class="author">
                 <div v-if="petition.authorName == signature.name">
                   <SignatoryCard :signatory="signature" />
                 </div>
-              </div>
+              </a>
             </div>
           </div>
         </div>
@@ -84,10 +105,36 @@ import { mapGetters, mapActions } from "vuex";
 import Moment from "moment";
 import api from "./../api";
 import SignatoryCard from "./../components/SignatoryCard";
+import VueSocialSharing from "vue-social-sharing";
+
+Vue.use(VueSocialSharing);
 
 export default {
   components: {
     SignatoryCard
+  },
+  data() {
+    return {
+      sharing: {
+        url: "https://www.parliament.nz/en/pb/petitions/",
+        hashtags: "vuejs,seng365,petition,makeachange",
+        twitterUser: "meganspetitionsite"
+      },
+      networks: [
+        {
+          network: "facebook",
+          name: "Facebook"
+        },
+        {
+          network: "linkedin",
+          name: "LinkedIn"
+        },
+        {
+          network: "twitter",
+          name: "Twitter"
+        }
+      ]
+    };
   },
   mounted: function() {
     this.loadUser();
@@ -108,13 +155,13 @@ export default {
     },
     hasSigned(s) {
       for (const signature of s) {
-        if(signature.name == this.user.name) {
+        if (signature.name == this.user.name) {
           return true;
         }
       }
     },
     isAuthor(p) {
-      if(p.authorName === this.user.name) {
+      if (p.authorName === this.user.name) {
         return true;
       }
     },
@@ -157,6 +204,10 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.tag {
+  width: 120px;
+  margin-right: 10px;
+}
 .petition-single {
   margin-top: 30px;
 }
@@ -181,12 +232,12 @@ export default {
   margin-top: 50px;
 }
 .description {
+  min-height: 70px;
   margin-bottom: 30px;
   padding-left: 30px;
   padding-right: 60px;
 }
-.signatures {
-  padding-top: 10px;
-  padding-bottom: 10px;
+.card {
+  gap: 20px;
 }
 </style>

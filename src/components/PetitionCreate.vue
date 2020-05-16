@@ -12,14 +12,13 @@
       <div class="field" for="description">
         <label class="required">Description</label>
         <div class="control">
-          <input
+          <textarea
             class="textarea"
-            type="text"
             placeholder="Description"
             v-model="description"
             required
             autofocus
-          />
+          ></textarea>
         </div>
       </div>
 
@@ -48,7 +47,14 @@
       <div class="field" for="image">
         <label class="required">Hero image</label>
         <div class="control">
-          <input type="file" accept="image/png,image/jpeg,image/gif" @change="bindImage" id="hero-image" required autofocus />
+          <input
+            type="file"
+            accept="image/png, image/jpeg, image/gif"
+            @change="bindImage"
+            id="hero-image"
+            required
+            autofocus
+          />
         </div>
       </div>
 

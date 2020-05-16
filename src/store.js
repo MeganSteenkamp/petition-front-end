@@ -31,7 +31,7 @@ const store = new Vuex.Store({
     }
   },
   actions: {
-    async register({}, user) {
+    async register({ }, user) {
       const result = await api.post("users/register", user);
       return result.userId;
     },
@@ -76,7 +76,9 @@ const store = new Vuex.Store({
     petitions: state => state.petitions,
     petition: state => state.petition,
     user: state => state.user,
-    signatures: state => state.signatures,
+    signatures: state => {
+      return state.signatures.slice().reverse();
+    },
     categories: state => state.categories
   }
 });

@@ -2,7 +2,9 @@
   <div class="petitions">
     <h1 class="title">View petitions</h1>
     <div class="search">
-      <h3><strong>Refine search</strong></h3>
+      <h3>
+        <strong>Refine search</strong>
+      </h3>
       <input v-model="search" placeholder="Search titles" />
       <select class="dropdown is-active" v-model="filter" placeholder="filter">
         <option value>All categories</option>
@@ -46,11 +48,13 @@
 import Vue from "vue";
 import { mapGetters, mapActions } from "vuex";
 import api from "../api";
+import Paginate from "vuejs-paginate";
 import PetitionCard from "./../components/PetitionCard";
 
 export default {
   components: {
-    PetitionCard
+    PetitionCard,
+    Paginate
   },
   data() {
     return {
