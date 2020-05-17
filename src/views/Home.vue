@@ -29,7 +29,6 @@ export default {
   text-align: center;
   border-radius: 15px;
   background-image: url('./../assets/hero-image.jpg');
-  background-color: hsl(171, 100%, 41%);
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;

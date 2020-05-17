@@ -287,8 +287,7 @@ export default {
 .tag {
   border-radius: 5px;
   width: 180px;
-  margin-left: 10px;
-  margin-right: 10px;
+  margin: 10px 10px 10px 10px;
 }
 .petition-single {
   margin-top: 30px;
