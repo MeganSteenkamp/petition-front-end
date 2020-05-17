@@ -47,7 +47,7 @@ export default {
       image: null
     };
   },
-  mounted: function() {
+  mounted() {
     this.loadPetition(this.petitionId || this.$route.params.petitionId);
     this.loadCategories();
   },
@@ -56,7 +56,7 @@ export default {
     getImageUrl(p) {
       return api.endpoint(`petitions/${p.petitionId}/photo`);
     },
-    validateForm: function() {
+    validateForm() {
       this.errors = [];
 
       const today = Moment();

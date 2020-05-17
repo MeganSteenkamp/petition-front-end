@@ -34,7 +34,7 @@ export default {
   components: {
     PetitionCard
   },
-  mounted: function() {
+  mounted() {
     this.loadUser();
     this.loadPetitions();
   },

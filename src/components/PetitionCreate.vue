@@ -96,7 +96,7 @@ export default {
       image: null
     };
   },
-  mounted: function() {
+  mounted() {
     this.loadCategories();
   },
   methods: {

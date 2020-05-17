@@ -32,7 +32,7 @@ export default {
       selectedCategory: ""
     };
   },
-  mounted: function() {
+  mounted() {
     this.loadCategories();
   },
   methods: {

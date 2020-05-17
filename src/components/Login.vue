@@ -58,6 +58,12 @@ export default {
       password: ""
     };
   },
+  computed: {
+    ...mapGetters(["user"]),
+    isLoggedIn() {
+      return !!this.user;
+    }
+  },
   methods: {
     ...mapActions(["login"]),
     async performLogin() {
@@ -70,6 +76,13 @@ export default {
         this.$router.push("/");
       } catch (e) {
         this.errors.push("Invalid email/password provided.");
+      }
+    }
+  },
+  watch: {
+    isLoggedIn(userLoggedIn) {
+      if (userLoggedIn) {
+        this.$router.push("/");
       }
     }
   }

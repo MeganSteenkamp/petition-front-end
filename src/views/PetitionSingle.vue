@@ -1,115 +1,161 @@
 <template>
-  <div class="petition-single">
-    <section class="hero is-light">
-      <div class="hero-body">
-        <div class="container">
-          <img class="container__image" :src="getImageUrl(petition)" />
-          <div class="container__text">
-            <h1 class="title">{{ petition.title }}</h1>
-            <h2 class="title is-6">
-              {{ petition.authorName }} started this petition
-              <br />
-              <div class="tag is-medium" :style="labelStyle(petition)">{{ petition.category }}</div>
-              <br />
-              <br />
-            </h2>
-            <p class="is-size-8">
-              Start date:
-              {{ petition.createdDate | moment }}
-            </p>
-            <p class="is-size-8">
-              Closing date:
-              {{ petition.closingDate | moment}}
-            </p>
-            <p class="is-size-8">
-              Signatures:
-              {{ petition.signatureCount }}
-            </p>
-          </div>
-        </div>
-      </div>
-    </section>
-    <section class="petition-content">
-      <div class="columns">
-        <div class="column is-two-thirds">
-          <p class="description">{{ petition.description }}</p>
-          <div v-if="signatures && signatures.length > 0">
-            <div id="signatures">
-              <h4>
-                <strong>Signatories:</strong>
-              </h4>
-              <a v-for="signature in signatures" :key="signature.signatoryId" class="signatures">
-                <SignatoryCard :signatory="signature" />
+  <div>
+    <div v-if="loading"></div>
+    <div v-else class="petition-single">
+      <section class="hero is-light">
+        <div class="hero-body">
+          <div class="container">
+            <img class="container__image" :src="getImageUrl(petition)" />
+            <div class="container__text">
+              <h1 class="title">{{ petition.title }}</h1>
+              <h2 class="title is-6">
+                {{ petition.authorName }} started this petition
                 <br />
-              </a>
-            </div>
-          </div>
-        </div>
-
-        <div class="column is-one-third">
-          <button
-            v-if="this.user && closingDateIsValid(petition) &&!isAuthor(petition) && !hasSigned(signatures)"
-            class="button is-danger is-rounded is-medium is-fullwidth"
-            @click="signPetition(petition)"
-          >Sign this petition</button>
-          <button
-            v-if="this.user && closingDateIsValid(petition) &&!isAuthor(petition) && hasSigned(signatures)"
-            class="button is-dark is-rounded is-medium is-fullwidth"
-            @click="removeSignature(petition)"
-          >Remove signature</button>
-          <router-link
-            v-if="this.user && closingDateIsValid(petition) &&isAuthor(petition)"
-            :to="{
-              name: 'edit-petition',
-              params: { petitionId: petition.petitionId }
-            }"
-          >
-            <button class="button is-info is-rounded is-medium is-fullwidth">Edit petition</button>
-          </router-link>
-          <button
-            v-if="this.user && closingDateIsValid(petition) &&isAuthor(petition)"
-            class="button is-warning is-rounded is-medium is-fullwidth"
-            @click="deletePetition(petition)"
-          >Delete petition</button>
-          <router-link v-if="!this.user && closingDateIsValid(petition)" :to="{ name: 'login' }">
-            <button
-              class="button is-danger is-rounded is-medium is-fullwidth"
-            >Sign in to sign this petition</button>
-          </router-link>
-          <br />
-          <h4>
-            <strong>Share via social media:</strong>
-          </h4>
-          <ShareNetwork
-            v-for="network in networks"
-            :network="network.network"
-            :key="network.key"
-            :url="sharing.url"
-            :title="petition.title"
-            :description="petition.description"
-            :quote="petition.description"
-            :hashtags="sharing.hashtags"
-            :twitterUser="sharing.twitterUser"
-          >
-            <div class="tag is-medium is-link">{{ network.name }}</div>
-          </ShareNetwork>
-          <br />
-          <div v-if="signatures && signatures.length > 0">
-            <div id="author">
-              <h4>
-                <br />
-                <strong>Author:</strong>
-              </h4>
-              <a v-for="signature in signatures" :key="signature.signatoryId" class="author">
-                <div v-if="petition.authorName == signature.name">
-                  <SignatoryCard :signatory="signature" />
+                <div class="tag is-medium" :style="labelStyle(petition)">
+                  {{ petition.category }}
                 </div>
-              </a>
+                <br />
+                <br />
+              </h2>
+              <p class="is-size-8">
+                Start date:
+                {{ petition.createdDate | moment }}
+              </p>
+              <p class="is-size-8">
+                Closing date:
+                {{ petition.closingDate | moment }}
+              </p>
+              <p class="is-size-8">
+                Signatures:
+                {{ petition.signatureCount }}
+              </p>
             </div>
           </div>
         </div>
-      </div>
-    </section>
+      </section>
+      <section class="petition-content">
+        <div class="columns">
+          <div class="column is-two-thirds">
+            <p class="description">{{ petition.description }}</p>
+            <div v-if="signatures && signatures.length > 0">
+              <div id="signatures">
+                <h4>
+                  <strong>Signatories:</strong>
+                </h4>
+                <a
+                  v-for="signature in signatures"
+                  :key="signature.signatoryId"
+                  class="signatures"
+                >
+                  <SignatoryCard :signatory="signature" />
+                  <br />
+                </a>
+              </div>
+            </div>
+          </div>
+
+          <div class="column is-one-third">
+            <button
+              v-if="
+                this.user &&
+                  closingDateIsValid(petition) &&
+                  !isAuthor(petition) &&
+                  !hasSigned(signatures)
+              "
+              class="button is-danger is-rounded is-medium is-fullwidth"
+              @click="signPetition(petition)"
+            >
+              Sign this petition
+            </button>
+            <button
+              v-if="
+                this.user &&
+                  closingDateIsValid(petition) &&
+                  !isAuthor(petition) &&
+                  hasSigned(signatures)
+              "
+              class="button is-dark is-rounded is-medium is-fullwidth"
+              @click="removeSignature(petition)"
+            >
+              Remove signature
+            </button>
+            <router-link
+              v-if="
+                this.user && closingDateIsValid(petition) && isAuthor(petition)
+              "
+              :to="{
+                name: 'edit-petition',
+                params: { petitionId: petition.petitionId }
+              }"
+            >
+              <button class="button is-info is-rounded is-medium is-fullwidth">
+                Edit petition
+              </button>
+            </router-link>
+            <button
+              v-if="
+                this.user && closingDateIsValid(petition) && isAuthor(petition)
+              "
+              class="button is-warning is-rounded is-medium is-fullwidth"
+              @click="deletePetition(petition)"
+            >
+              Delete petition
+            </button>
+            <router-link
+              v-if="!this.user && closingDateIsValid(petition)"
+              :to="{ name: 'login' }"
+            >
+              <button
+                class="button is-danger is-rounded is-medium is-fullwidth"
+              >
+                Sign in to sign this petition
+              </button>
+            </router-link>
+            <br />
+            <h4>
+              <strong>Share via social media:</strong>
+            </h4>
+            <ShareNetwork
+              v-for="network in networks"
+              :network="network.network"
+              :key="network.key"
+              :url="sharing.url"
+              :title="petition.title"
+              :description="petition.description"
+              :quote="petition.description"
+              :hashtags="sharing.hashtags"
+              :twitterUser="sharing.twitterUser"
+            >
+              <div class="tag is-medium is-link">
+                <font-awesome-icon
+                  style="margin-right:10px"
+                  :icon="['fab', network.icon]"
+                />
+                <span>{{ network.name }}</span>
+              </div>
+            </ShareNetwork>
+            <br />
+            <div v-if="signatures && signatures.length > 0">
+              <div id="author">
+                <h4>
+                  <br />
+                  <strong>Author:</strong>
+                </h4>
+                <a
+                  v-for="signature in signatures"
+                  :key="signature.signatoryId"
+                  class="author"
+                >
+                  <div v-if="petition.authorName == signature.name">
+                    <SignatoryCard :signatory="signature" />
+                  </div>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
   </div>
 </template>
 
@@ -137,23 +183,29 @@ export default {
       networks: [
         {
           network: "facebook",
-          name: "Facebook"
+          name: "Facebook",
+          icon: "facebook-square"
         },
         {
           network: "linkedin",
-          name: "LinkedIn"
+          name: "LinkedIn",
+          icon: "linkedin"
         },
         {
           network: "twitter",
-          name: "Twitter"
+          name: "Twitter",
+          icon: "twitter-square"
         }
-      ]
+      ],
+      loading: true
     };
   },
-  mounted: function() {
-    this.loadUser();
-    this.loadPetition(this.petitionId);
-    this.loadSignatures(this.petitionId);
+  async mounted() {
+    this.loading = true;
+    await this.loadUser();
+    await this.loadPetition(this.petitionId);
+    await this.loadSignatures(this.petitionId);
+    this.loading = false;
   },
   methods: {
     ...mapActions(["loadUser", "loadPetition", "loadSignatures"]),
@@ -233,6 +285,7 @@ export default {
   margin-bottom: 20px;
 }
 .tag {
+  border-radius: 25px;
   width: 120px;
   margin-right: 10px;
 }

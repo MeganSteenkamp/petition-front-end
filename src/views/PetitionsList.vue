@@ -5,22 +5,27 @@
       <h3>
         <strong>Refine search</strong>
       </h3>
-      <input v-model="search" placeholder="Search titles" />
-      <select class="dropdown is-active" v-model="filter" placeholder="filter">
+      <input v-model="search" placeholder="Search titles"  @keypress="resetPage" />
+      <select class="dropdown is-active" v-model="category" placeholder="category"  @change="resetPage">
         <option value>All categories</option>
         <option v-for="category in categories" :key="category">{{ category }}</option>
       </select>
-      <select class="dropdown is-active" v-model="sort" placeholder="Sort">
+      <select class="dropdown is-active" v-model="sort" placeholder="Sort" @change="resetPage">
         <option value="ALPHABETICAL_ASC">Title A to Z</option>
         <option value="ALPHABETICAL_DESC">Title Z to A</option>
         <option value="SIGNATURES_ASC">Signatures Low to High</option>
         <option value="SIGNATURES_DESC">Signatures High to Low</option>
       </select>
+      <button class="button" @click="previous" :disabled="!canGoPrevious">Previous</button>
+      <button class="button" @click="next" :disabled="!canGoNext"> Next</button>
+      <div v-for="(page, index) in pagedPetitions" @click="pageIndex = index">
+        <p v-if="index === pageIndex"><b>{{ index + 1}}</b></p>
+        <p v-else>{{ index + 1}}</p>
+      </div>
     </div>
-
-    <div v-if="petitions && sortedPetitions.length > 0">
+    <div v-if="currentPetitions && currentPetitions.length > 0">
       <div id="petitions">
-        <div v-for="petition in sortedPetitions" :key="petition.petitionId" class="petition">
+        <div v-for="petition in currentPetitions" :key="petition.petitionId" class="petition">
           <router-link
             :to="{
               name: 'petition',
@@ -32,7 +37,7 @@
         </div>
       </div>
     </div>
-    <div v-if="petitions && sortedPetitions.length == 0">
+    <div v-else>
       <div class="empty-petitions">
         <div class="subtitle is-size-2">
           <strong>We currently have no petitions.</strong>
@@ -48,31 +53,82 @@
 import Vue from "vue";
 import { mapGetters, mapActions } from "vuex";
 import api from "../api";
-import Paginate from "vuejs-paginate";
 import PetitionCard from "./../components/PetitionCard";
+
+const CHUNK_FACTOR = 5;
 
 export default {
   components: {
-    PetitionCard,
-    Paginate
+    PetitionCard
   },
   data() {
     return {
-      sort: "SIGNATURES_DESC",
+      sort: "",
       search: "",
-      filter: this.$route.query.category || ""
+      category: "",
+      pageIndex: 0
     };
   },
-  mounted: function() {
+  mounted() {
     this.loadPetitions();
+    this.category = this.$route.query.category || "";
+    this.search = this.$route.query.search || "";
+    this.sort = this.$route.query.sort || "SIGNATURES_DESC";
+    console.log(Number.parseInt(this.$route.query.pageIndex));
+    try {
+      this.pageIndex = Number.parseInt(this.$route.query.pageIndex);
+    } catch (e) {}
   },
   methods: {
-    ...mapActions(["loadPetitions"])
+    ...mapActions(["loadPetitions"]),
+    updateQueryString() {
+      let query = {
+        pageIndex: this.pageIndex
+      };
+      if (this.category) {
+        query.category = this.category;
+      }
+      if (this.search) {
+        query.search = this.search;
+      }
+      if (this.sort) {
+        query.sort = this.sort;
+      }
+      this.$router.replace({ query })
+    },
+    previous() {
+      this.pageIndex -= 1;
+      this.updateQueryString();
+    },
+    next() {
+      this.pageIndex += 1;
+      this.updateQueryString();
+    },
+    resetPage() {
+      this.pageIndex = 0;
+    }
+  },
+  watch: {
+    category (newVal, oldVal) {
+      this.updateQueryString();
+    },
+    search () {
+      this.updateQueryString();
+    },
+    sort () {
+      this.updateQueryString();
+    }
   },
   computed: {
     ...mapGetters(["petitions"]),
     petitionId() {
       return this.$route.params.petitionId;
+    },
+    canGoPrevious () {
+      return this.pageIndex > 0
+    },
+    canGoNext() {
+      return this.pageIndex < this.pagedPetitions.length - 1;
     },
     filteredPetitions() {
       var reduced = this.petitions;
@@ -82,10 +138,31 @@ export default {
           p.title.toLowerCase().includes(lowerCaseSearch)
         );
       }
-      if (this.filter) {
-        reduced = reduced.filter(p => p.category === this.filter);
+      if (this.category) {
+        reduced = reduced.filter(p => p.category === this.category);
       }
       return reduced;
+    },
+    currentPetitions() {
+      return this.pagedPetitions[this.pageIndex];
+    },
+    pagedPetitions() {
+      let pages = [];
+      let page = [];
+
+      for (var i = 0; i < this.sortedPetitions.length; i++) {
+        if (page.length < CHUNK_FACTOR) {
+          page.push(this.sortedPetitions[i]);
+        } else {
+          pages.push(page);
+          page = [this.sortedPetitions[i]];
+        }
+      }
+
+      if (page.length > 0) {
+        pages.push(page);
+      }
+      return pages;
     },
     sortedPetitions() {
       if (!this.sort || this.sort == "SIGNATURES_DESC") {

@@ -43,7 +43,7 @@ import Vue from "vue";
 import { mapGetters, mapActions } from "vuex";
 
 export default {
-  mounted: function() {
+  mounted() {
     this.loadUser();
   },
   methods: {
