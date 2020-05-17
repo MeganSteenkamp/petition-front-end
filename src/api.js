@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const useLocal = false;
+const useLocal = true;
 const baseUrl = useLocal
   ? "http://localhost:4941/api/v1/"
   : "http://csse-s365.canterbury.ac.nz:4001/api/v1/";

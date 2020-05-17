@@ -43,8 +43,8 @@ import Vue from "vue";
 import { mapGetters, mapActions } from "vuex";
 
 export default {
-  mounted() {
-    this.loadUser();
+  async mounted() {
+    await this.loadUser();
   },
   methods: {
     ...mapActions(["loadUser", "logout"]),

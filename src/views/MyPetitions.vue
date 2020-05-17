@@ -34,9 +34,9 @@ export default {
   components: {
     PetitionCard
   },
-  mounted() {
-    this.loadUser();
-    this.loadPetitions();
+  async mounted() {
+    await this.loadUser();
+    await this.loadPetitions();
   },
   methods: {
     ...mapActions(["loadUser", "loadPetitions"])
@@ -82,7 +82,7 @@ export default {
 .empty-petitions {
   padding: 10px 10px 10px 10px;
   text-align: center;
-  border-radius: 25px;
+  border-radius: 15px;
   background-color: whitesmoke;
   background-size: cover;
   background-position: center;

@@ -96,8 +96,8 @@ export default {
       image: null
     };
   },
-  mounted() {
-    this.loadCategories();
+  async mounted() {
+    await this.loadCategories();
   },
   methods: {
     ...mapActions(["loadCategories", "createPetition"]),

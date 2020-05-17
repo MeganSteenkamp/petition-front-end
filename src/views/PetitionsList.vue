@@ -5,8 +5,13 @@
       <h3>
         <strong>Refine search</strong>
       </h3>
-      <input v-model="search" placeholder="Search titles"  @keypress="resetPage" />
-      <select class="dropdown is-active" v-model="category" placeholder="category"  @change="resetPage">
+      <input v-model="search" placeholder="Search titles" @keypress="resetPage" />
+      <select
+        class="dropdown is-active"
+        v-model="category"
+        placeholder="category"
+        @change="resetPage"
+      >
         <option value>All categories</option>
         <option v-for="category in categories" :key="category">{{ category }}</option>
       </select>
@@ -16,15 +21,9 @@
         <option value="SIGNATURES_ASC">Signatures Low to High</option>
         <option value="SIGNATURES_DESC">Signatures High to Low</option>
       </select>
-      <button class="button" @click="previous" :disabled="!canGoPrevious">Previous</button>
-      <button class="button" @click="next" :disabled="!canGoNext"> Next</button>
-      <div v-for="(page, index) in pagedPetitions" @click="pageIndex = index">
-        <p v-if="index === pageIndex"><b>{{ index + 1}}</b></p>
-        <p v-else>{{ index + 1}}</p>
-      </div>
     </div>
     <div v-if="currentPetitions && currentPetitions.length > 0">
-      <div id="petitions">
+      <div class="petitions-list">
         <div v-for="petition in currentPetitions" :key="petition.petitionId" class="petition">
           <router-link
             :to="{
@@ -40,11 +39,23 @@
     <div v-else>
       <div class="empty-petitions">
         <div class="subtitle is-size-2">
-          <strong>We currently have no petitions.</strong>
+          <strong>We can't find any petitions.</strong>
         </div>
         <div class="subtitle">Is there something you want to change?</div>
         <router-link class="tag is-danger is-large" to="/start-a-petition">Start a petition</router-link>
       </div>
+    </div>
+    <div class="pagination">
+    <button class="button is-outlined" @click="updateIndex(0)" :disabled="!canGoPrevious">First</button>
+    <button class="button is-outlined" @click="previous" :disabled="!canGoPrevious">Previous</button>
+    <a v-for="(page, index) in pagedPetitions" :key="index" @click="updateIndex(index)">
+      <button class="button is-link is-outlined" v-if="index === pageIndex">
+        <b>{{ index + 1}}</b>
+      </button>
+      <button class="button is-outlined" v-else>{{ index + 1}}</button>
+    </a>
+    <button class="button is-outlined" @click="next" :disabled="!canGoNext">Next</button>
+    <button class="button is-outlined" @click="updateIndex(getLastPage)" :disabled="!canGoNext">Last</button>
     </div>
   </div>
 </template>
@@ -55,7 +66,7 @@ import { mapGetters, mapActions } from "vuex";
 import api from "../api";
 import PetitionCard from "./../components/PetitionCard";
 
-const CHUNK_FACTOR = 5;
+const CHUNK_FACTOR = 10;
 
 export default {
   components: {
@@ -69,16 +80,17 @@ export default {
       pageIndex: 0
     };
   },
-  mounted() {
-    this.loadPetitions();
+  async mounted() {
+    await this.loadPetitions();
     this.category = this.$route.query.category || "";
     this.search = this.$route.query.search || "";
     this.sort = this.$route.query.sort || "SIGNATURES_DESC";
-    console.log(Number.parseInt(this.$route.query.pageIndex));
     try {
       let parsed = Number.parseInt(this.$route.query.pageIndex);
       this.pageIndex = isNaN(parsed) ? 0 : parsed;
-    } catch (e) {}
+    } catch (e) {
+      this.pageIndex = 0;
+    }
   },
   methods: {
     ...mapActions(["loadPetitions"]),
@@ -95,7 +107,7 @@ export default {
       if (this.sort) {
         query.sort = this.sort;
       }
-      this.$router.replace({ query })
+      this.$router.replace({ query });
     },
     previous() {
       this.pageIndex -= 1;
@@ -105,18 +117,22 @@ export default {
       this.pageIndex += 1;
       this.updateQueryString();
     },
+    updateIndex(i) {
+      this.pageIndex = i;
+      this.updateQueryString();
+    },
     resetPage() {
       this.pageIndex = 0;
     }
   },
   watch: {
-    category (newVal, oldVal) {
+    category(newVal, oldVal) {
       this.updateQueryString();
     },
-    search () {
+    search() {
       this.updateQueryString();
     },
-    sort () {
+    sort() {
       this.updateQueryString();
     }
   },
@@ -125,11 +141,14 @@ export default {
     petitionId() {
       return this.$route.params.petitionId;
     },
-    canGoPrevious () {
-      return this.pageIndex > 0
+    canGoPrevious() {
+      return this.pageIndex > 0;
     },
     canGoNext() {
       return this.pageIndex < this.pagedPetitions.length - 1;
+    },
+    getLastPage() {
+      return this.pagedPetitions.length - 1;
     },
     filteredPetitions() {
       var reduced = this.petitions;
@@ -212,6 +231,11 @@ export default {
   padding-bottom: 30px;
   line-height: 19px;
 }
+.petitions-list {
+  height: 750px;
+  overflow: auto;
+  text-align: justify;
+}
 .petition {
   padding-top: 20px;
   padding-bottom: 20px;
@@ -221,12 +245,17 @@ export default {
 .empty-petitions {
   padding: 10px 10px 10px 10px;
   text-align: center;
-  border-radius: 25px;
+  border-radius: 15px;
   background-color: whitesmoke;
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
   height: 200px;
+  justify-content: center;
+  align-items: center;
+}
+.pagination {
+  margin-top: 15px;
   justify-content: center;
   align-items: center;
 }

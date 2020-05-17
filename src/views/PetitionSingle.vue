@@ -62,7 +62,7 @@
                   !isAuthor(petition) &&
                   !hasSigned(signatures)
               "
-              class="button is-danger is-rounded is-medium is-fullwidth"
+              class="button is-danger is-medium is-fullwidth"
               @click="signPetition(petition)"
             >
               Sign this petition
@@ -74,7 +74,7 @@
                   !isAuthor(petition) &&
                   hasSigned(signatures)
               "
-              class="button is-dark is-rounded is-medium is-fullwidth"
+              class="button is-dark is-medium is-fullwidth"
               @click="removeSignature(petition)"
             >
               Remove signature
@@ -88,7 +88,7 @@
                 params: { petitionId: petition.petitionId }
               }"
             >
-              <button class="button is-info is-rounded is-medium is-fullwidth">
+              <button class="button is-info is-medium is-fullwidth">
                 Edit petition
               </button>
             </router-link>
@@ -96,7 +96,7 @@
               v-if="
                 this.user && closingDateIsValid(petition) && isAuthor(petition)
               "
-              class="button is-warning is-rounded is-medium is-fullwidth"
+              class="button is-warning is-medium is-fullwidth"
               @click="deletePetition(petition)"
             >
               Delete petition
@@ -106,7 +106,7 @@
               :to="{ name: 'login' }"
             >
               <button
-                class="button is-danger is-rounded is-medium is-fullwidth"
+                class="button is-danger is-medium is-fullwidth"
               >
                 Sign in to sign this petition
               </button>
@@ -128,7 +128,7 @@
             >
               <div class="tag is-medium is-link">
                 <font-awesome-icon
-                  style="margin-right:10px"
+                  style="margin-right:20px"
                   :icon="['fab', network.icon]"
                 />
                 <span>{{ network.name }}</span>
@@ -285,8 +285,9 @@ export default {
   margin-bottom: 20px;
 }
 .tag {
-  border-radius: 25px;
-  width: 120px;
+  border-radius: 5px;
+  width: 180px;
+  margin-left: 10px;
   margin-right: 10px;
 }
 .petition-single {
@@ -294,7 +295,7 @@ export default {
 }
 .hero {
   margin-bottom: 70px;
-  border-radius: 25px;
+  border-radius: 15px;
 }
 .title {
   line-height: 40px;

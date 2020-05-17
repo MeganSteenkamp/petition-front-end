@@ -47,9 +47,9 @@ export default {
       image: null
     };
   },
-  mounted() {
-    this.loadPetition(this.petitionId || this.$route.params.petitionId);
-    this.loadCategories();
+  async mounted() {
+    await this.loadPetition(this.petitionId || this.$route.params.petitionId);
+    await this.loadCategories();
   },
   methods: {
     ...mapActions(["loadCategories", "loadPetition"]),
