@@ -76,7 +76,8 @@ export default {
     this.sort = this.$route.query.sort || "SIGNATURES_DESC";
     console.log(Number.parseInt(this.$route.query.pageIndex));
     try {
-      this.pageIndex = Number.parseInt(this.$route.query.pageIndex);
+      let parsed = Number.parseInt(this.$route.query.pageIndex);
+      this.pageIndex = isNaN(parsed) ? 0 : parsed;
     } catch (e) {}
   },
   methods: {
