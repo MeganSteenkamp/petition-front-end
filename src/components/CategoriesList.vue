@@ -32,8 +32,8 @@ export default {
       selectedCategory: ""
     };
   },
-  mounted() {
-    this.loadCategories();
+  async mounted() {
+    await this.loadCategories();
   },
   methods: {
     ...mapActions(["loadCategories"])

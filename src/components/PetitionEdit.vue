@@ -1,29 +1,78 @@
 <template>
-  <div>
+  <div v-if="loading"></div>
+  <div v-else>
     <h1 class="title">Edit petition</h1>
+    <form @submit.prevent="submit">
+      <div class="field" for="title">
+        <label class="required">Title</label>
+        <div class="control">
+          <input class="input" type="text" placeholder="Title" v-model="petition.title" autofocus />
+        </div>
+      </div>
 
-    <table class="table">
-      <tr>
-        <td><strong>Title</strong></td>
-        <td>{{petition.title}}</td>
-        <td><button class="button is-info">Edit</button></td>
-      </tr>
-      <tr>
-        <td><strong>Description</strong></td>
-        <td>{{petition.description}}</td>
-        <td><button class="button is-info">Edit</button></td>
-      </tr>
-      <tr>
-        <td><strong>Category</strong></td>
-        <td>{{petition.category}}</td>
-        <td><button class="button is-info">Edit</button></td>
-      </tr>
-      <tr>
-        <td><strong>Hero image</strong></td>
-        <td><img class="image" :src="getImageUrl(petition)" /></td>
-        <td><button class="button is-info">Edit</button></td>
-      </tr>
-    </table>
+      <div class="field" for="description">
+        <label class="required">Description</label>
+        <div class="control">
+          <textarea
+            class="textarea"
+            placeholder="Description"
+            v-model="petition.description"
+            autofocus
+          ></textarea>
+        </div>
+      </div>
+
+      <div class="field" for="category">
+        <label class="required">Category</label>
+        <div class="control">
+          <div class="select">
+            <select id="categories" name="dropdown" v-model="petition.category" autofocus>
+              <option
+                v-for="category in categories"
+                :key="category.name"
+                :value="category.name"
+              >{{ category.name }}</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <div class="field" for="closingDate">
+        <label>Closing date</label>
+        <div class="control">
+          <date-picker v-model="petition.closingDate" type="date" />
+        </div>
+      </div>
+
+      <div class="field" for="image">
+        <label class="required">Hero image</label>
+        <img class="image" :src="getImageUrl(petition)" />
+        <div class="control">
+          <input
+            type="file"
+            accept="image/png, image/jpeg, image/gif"
+            @change="bindImage"
+            id="hero-image"
+            autofocus
+          />
+        </div>
+      </div>
+
+      <div class="field is-grouped">
+        <div class="control">
+          <button class="button is-link">Submit</button>
+        </div>
+        <div class="control">
+          <button class="button is-link is-light">Cancel</button>
+        </div>
+      </div>
+
+      <div class="field">
+        <ul>
+          <li class="error" v-for="error in errors" v-bind:key="error">{{ error }}</li>
+        </ul>
+      </div>
+    </form>
   </div>
 </template>
 
@@ -40,23 +89,26 @@ export default {
   data() {
     return {
       errors: [],
-      title: this.title,
+      loading: true,
+      title: "",
       description: "",
       selectedCategory: 1,
-      closingDate: null,
       image: null
     };
   },
   async mounted() {
-    await this.loadPetition(this.petitionId || this.$route.params.petitionId);
+    this.loading = true;
+    await this.loadUser();
+    await this.loadPetition(this.petitionId);
     await this.loadCategories();
+    this.loading = false;
   },
   methods: {
-    ...mapActions(["loadCategories", "loadPetition"]),
+    ...mapActions(["loadPetition", "loadCategories", "loadUser"]),
     getImageUrl(p) {
       return api.endpoint(`petitions/${p.petitionId}/photo`);
     },
-    validateForm() {
+    validateForm: function() {
       this.errors = [];
 
       const today = Moment();
@@ -101,19 +153,15 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(["categories", "petition"])
+    ...mapGetters(["petition", "categories", "user"]),
+    petitionId() {
+      return this.$route && this.$route.params.petitionId;
+    }
   }
 };
 </script>
 
 <style>
-.table {
-  border-top: 2px solid black;
-  border-bottom: 2px solid black;
-}
-.image {
-  max-height: 200px;
-}
 .required:after {
   content: " *";
   color: red;
