@@ -58,7 +58,7 @@
             @click="showImageUpdate()"
           >Upload photo</button>
         </div>
-        <div v-if="!!updatingImage" class="control">
+        <div v-if="!!updatingImage && !hasDeletedPhoto" class="control">
           <input
             type="file"
             accept="image/png, image/jpeg, image/gif"
@@ -137,6 +137,7 @@ export default {
       emailChanged: false,
       updatingImage: false,
       hasProfilePicture: true,
+      hasDeletedPhoto: false,
       currentPassword: "",
       newPassword: "",
       confirmPassword: ""
@@ -173,6 +174,7 @@ export default {
         const userId = api.getUserId();
         await api.delete(`users/${userId}/photo`);
         this.image = null;
+        this.hasDeletedPhoto = true;
         this.hasProfilePicture = false;
       }
     },
