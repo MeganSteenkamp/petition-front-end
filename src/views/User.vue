@@ -52,7 +52,7 @@ export default {
     this.loading = false;
   },
   methods: {
-    ...mapActions(["loadUser", "logout"]),
+    ...mapActions(["loadUser"]),
     getImageUrl() {
       const userId = api.getUserId();
       return api.endpoint(`users/${userId}/photo`);

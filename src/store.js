@@ -44,6 +44,10 @@ const store = new Vuex.Store({
       api.clearUserAndToken();
       commit("setUser", null);
     },
+    async updateUser({ commit, dispatch }, user) {
+      const userId = api.getUserId();
+      const result = await api.patch(`users/${userId}`, user);
+    },
     async loadPetitions({ commit }) {
       const petitions = await api.get("petitions");
       commit("setPetitions", petitions);
@@ -64,7 +68,6 @@ const store = new Vuex.Store({
       return result.petitionId;
     },
     async updatePetition({ commit, dispatch }, petition) {
-      console.log(petition);
       const result = await api.patch(`petitions/${this.state.petition.petitionId}`, petition);
     },
     async loadSignatures({ commit }, id) {

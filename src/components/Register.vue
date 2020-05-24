@@ -75,14 +75,14 @@
         </div>
       </div>
 
-      <div class="field" for="password_confirmation">
+      <div class="field" for="passwordConfirmation">
         <label class="required">Confirm password</label>
         <div class="control">
           <input
             class="input"
             type="password"
             placeholder="Confirm Password"
-            v-model="password_confirmation"
+            v-model="passwordConfirmation"
             required
             autofocus
           />
@@ -97,7 +97,7 @@
       </ul>
 
       <div>
-        <button type="submit">Register</button>
+        <button class="button is-link" type="submit">Register</button>
       </div>
     </form>
   </div>
@@ -117,7 +117,7 @@ export default {
       city: null,
       country: null,
       password: "",
-      password_confirmation: "",
+      passwordConfirmation: "",
       image: null
     };
   },
@@ -129,7 +129,7 @@ export default {
     validateForm() {
       this.errors = [];
 
-      if (this.password !== this.password_confirmation) {
+      if (this.password !== this.passwordConfirmation) {
         this.errors.push("Passwords do not match.");
         return;
       }
