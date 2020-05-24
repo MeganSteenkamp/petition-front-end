@@ -50,18 +50,25 @@
         </div>
       </div>
 
-      <div class="field" for="image">
+      <div v-if="!updatingImage && !image" class="field" for="image">
         <label class="required">Hero image</label>
         <img class="image" :src="getImageUrl(petition)" />
-        <div class="control">
-          <input
-            type="file"
-            accept="image/png, image/jpeg, image/gif"
-            @change="bindImage"
-            id="hero-image"
-            autofocus
-          />
-        </div>
+      </div>
+      <div>
+        <button
+          type="button"
+          class="button is-link is-light"
+          @click="showImageUpdate()"
+        >Update photo</button>
+      </div>
+      <div v-if="!!updatingImage" class="control">
+        <input
+          type="file"
+          accept="image/png, image/jpeg, image/gif"
+          @change="bindImage"
+          id="hero-image"
+          autofocus
+        />
       </div>
 
       <div class="field is-grouped">
@@ -96,6 +103,7 @@ export default {
     return {
       errors: [],
       loading: true,
+      updatingImage: false,
       image: null
     };
   },
@@ -115,6 +123,11 @@ export default {
     ]),
     getImageUrl(p) {
       return api.endpoint(`petitions/${p.petitionId}/photo`);
+    },
+    showImageUpdate() {
+      if (!this.image) {
+        this.updatingImage = !this.updatingImage;
+      }
     },
     validateForm() {
       this.errors = [];
@@ -153,7 +166,7 @@ export default {
       };
 
       if (this.petition.closingDate) {
-        data.closingDate = this.petition.closingDate;
+        data.closingDate = Moment(this.petition.closingDate).format("YYYY-MM-DD");
       }
 
       try {
@@ -199,6 +212,10 @@ export default {
 </script>
 
 <style>
+.button {
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
 .image {
   max-height: 200px;
 }

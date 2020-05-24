@@ -34,6 +34,7 @@
       <div class="field" for="image">
         <label>Profile picture</label>
         <img
+          v-if="!!hasProfilePicture && !updatingImage"
           class="image"
           :src="getImageUrl()"
           onerror="this.onerror=null;this.src='https://upload.wikimedia.org/wikipedia/commons/8/89/Portrait_Placeholder.png'"
@@ -108,8 +109,13 @@
         <li v-for="error in errors" v-bind:key="error">{{ error }}</li>
       </ul>
 
-      <div>
-        <button class="button is-link" type="submit">Submit</button>
+      <div class="field is-grouped">
+        <div class="control">
+          <button class="button is-link">Submit</button>
+        </div>
+        <div class="control">
+          <button class="button is-link is-light">Cancel</button>
+        </div>
       </div>
     </form>
   </div>
@@ -155,7 +161,9 @@ export default {
       this.editingPassword = !this.editingPassword;
     },
     showImageUpdate() {
-      this.updatingImage = !this.updatingImage;
+      if (!this.image) {
+        this.updatingImage = !this.updatingImage;
+      }
     },
     async deleteProfilePhoto() {
       const answer = confirm(
@@ -164,6 +172,8 @@ export default {
       if (answer) {
         const userId = api.getUserId();
         await api.delete(`users/${userId}/photo`);
+        this.image = null;
+        this.hasProfilePicture = false;
       }
     },
     getImageUrl() {

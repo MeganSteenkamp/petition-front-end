@@ -56,7 +56,7 @@
                   !isAuthor(petition) &&
                   !hasSigned(signatures)
               "
-              class="button is-danger is-medium is-fullwidth"
+              class="button is-danger is-medium is-light is-fullwidth"
               @click="signPetition(petition)"
             >Sign this petition</button>
             <button
@@ -66,7 +66,7 @@
                   !isAuthor(petition) &&
                   hasSigned(signatures)
               "
-              class="button is-dark is-medium is-fullwidth"
+              class="button is-link is-medium is-light is-fullwidth"
               @click="removeSignature(petition)"
             >Remove signature</button>
             <router-link
@@ -78,17 +78,17 @@
                 params: { petitionId: petition.petitionId }
               }"
             >
-              <button class="button is-info is-medium is-fullwidth">Edit petition</button>
+              <button class="button is-info is-medium is-light is-fullwidth">Edit petition</button>
             </router-link>
             <button
               v-if="
                 this.user && closingDateIsValid(petition) && isAuthor(petition)
               "
-              class="button is-warning is-medium is-fullwidth"
+              class="button is-warning is-medium is-light is-fullwidth"
               @click="deletePetition(petition)"
             >Delete petition</button>
             <router-link v-if="!this.user && closingDateIsValid(petition)" :to="{ name: 'login' }">
-              <button class="button is-danger is-medium is-fullwidth">Sign in to sign this petition</button>
+              <button class="button is-danger is-medium is-light is-fullwidth">Sign in to sign this petition</button>
             </router-link>
             <br />
             <h4>
@@ -185,6 +185,10 @@ export default {
       return api.endpoint(`petitions/${p.petitionId}/photo`);
     },
     closingDateIsValid(p) {
+      // May have no closing date
+      if (p.closingDate == null) {
+        return true;
+      }
       const today = Moment();
       const closingDate = Moment(p.closingDate);
       if (closingDate > today) {
