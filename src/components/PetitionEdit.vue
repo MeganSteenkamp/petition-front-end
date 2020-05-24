@@ -26,7 +26,13 @@
         <label class="required">Category</label>
         <div class="control">
           <div class="select">
-            <select id="categories" name="dropdown" v-model="selectedCategory" autofocus>
+            <select
+              id="categories"
+              name="dropdown"
+              :value="categoryId"
+              @change="onCategoryChange"
+              autofocus
+            >
               <option
                 v-for="category in categories"
                 :key="category.categoryId"
@@ -40,7 +46,7 @@
       <div class="field" for="closingDate">
         <label>Closing date</label>
         <div class="control">
-          <date-picker v-model="closingDate" type="date" />
+          <date-picker :value="closingDate" @change="onDateChange" type="date" />
         </div>
       </div>
 
@@ -78,7 +84,7 @@
 
 <script>
 import Vue from "vue";
-import _default, { mapGetters, mapActions } from "vuex";
+import _default, { mapGetters, mapActions, mapMutations } from "vuex";
 import Moment from "moment";
 import DatePicker from "vue2-datepicker";
 import "vue2-datepicker/index.css";
@@ -101,7 +107,12 @@ export default {
     this.loading = false;
   },
   methods: {
-    ...mapActions(["loadPetition", "loadCategories", "loadUser", "updatePetition"]),
+    ...mapActions([
+      "loadPetition",
+      "loadCategories",
+      "loadUser",
+      "updatePetition"
+    ]),
     getImageUrl(p) {
       return api.endpoint(`petitions/${p.petitionId}/photo`);
     },
@@ -110,6 +121,14 @@ export default {
 
       const today = Moment();
       const closingDate = Moment(this.closingDate);
+
+      if (this.petition.title == "") {
+        this.errors.push("A petition must have a title.");
+      }
+
+      if (this.petition.description == "") {
+        this.errors.push("A petition must have a description.");
+      }
 
       if (closingDate < today) {
         this.errors.push("Closing date must be in the future.");
@@ -129,22 +148,19 @@ export default {
 
       let data = {
         title: this.petition.title,
-        description: this.petition.description
+        description: this.petition.description,
+        categoryId: this.petition.categoryId
       };
 
-      //categoryId: this.selectedCategory,
-      //closingDate: Moment(this.closingDate).format("YYYY-MM-DD")
-
-      console.log(data);
+      if (this.petition.closingDate) {
+        data.closingDate = this.petition.closingDate;
+      }
 
       try {
         let petitionId = this.petition.petitionId;
         await this.updatePetition(data);
         if (!!this.image) {
-          await api.uploadFile(
-            `petitions/${petitionId}/photo`,
-            this.image
-          );
+          await api.uploadFile(`petitions/${petitionId}/photo`, this.image);
         }
         this.$router.push(`/petition/${petitionId}`);
       } catch (e) {
@@ -153,6 +169,12 @@ export default {
     },
     bindImage() {
       this.image = event.target.files[0];
+    },
+    onDateChange(date) {
+      this.petition.closingDate = Moment(date).format("YYYY-MM-DD");
+    },
+    onCategoryChange(category) {
+      this.petition.categoryId = Number.parseInt(document.getElementById("categories").value);
     }
   },
   computed: {
@@ -160,7 +182,7 @@ export default {
     petitionId() {
       return this.$route && this.$route.params.petitionId;
     },
-    selectedCategory() {
+    categoryId() {
       for (var i = 0; i < this.categories.length; i++) {
         if (this.categories[i].name == this.petition.category) {
           return this.categories[i].categoryId;
