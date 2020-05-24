@@ -7,23 +7,17 @@
           <div class="container">
             <img class="container__image" :src="getImageUrl(petition)" />
             <div class="container__text">
-              <h1 class="title">{{ petition.title }}</h1>
-              <h2 class="title is-6">
-                {{ petition.authorName }} started this petition
+              <p class="title">{{ petition.title }}</p>
+              <p class="subtitle is-6">{{ petition.authorName }} started this petition</p>
+              <div class="tag is-medium" :style="labelStyle(petition)">{{ petition.category }}</div>
+              <p class="info is-size-8">
                 <br />
-                <div class="tag is-medium" :style="labelStyle(petition)">{{ petition.category }}</div>
-                <br />
-                <br />
-              </h2>
-              <p class="is-size-8">
-                <strong>Start date:</strong>
+                <strong>Created date:</strong>
                 {{ petition.createdDate | moment }}
-              </p>
-              <p class="is-size-8">
+                <br />
                 <strong>Closing date:</strong>
                 {{ petition.closingDate | moment }}
-              </p>
-              <p class="is-size-8">
+                <br />
                 <strong>Signatures:</strong>
                 {{ petition.signatureCount }}
               </p>
@@ -36,7 +30,7 @@
           <div class="column is-two-thirds">
             <p class="description">{{ petition.description }}</p>
             <div v-if="signatures && signatures.length > 0">
-              <div id="signatures">
+              <div class="signatures">
                 <h4>
                   <strong>Signatories:</strong>
                 </h4>
@@ -88,9 +82,7 @@
               @click="deletePetition(petition)"
             >Delete petition</button>
             <router-link v-if="!this.user && closingDateIsValid(petition)" :to="{ name: 'login' }">
-              <button
-                class="button is-danger is-medium is-light is-fullwidth"
-              >Sign this petition</button>
+              <button class="button is-danger is-medium is-light is-fullwidth">Sign this petition</button>
             </router-link>
             <br />
             <h4>
@@ -265,14 +257,18 @@ export default {
 .tag {
   border-radius: 5px;
   width: 180px;
-  margin: 10px 10px 10px 10px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  margin-right: 10px;
 }
 .petition-single {
   margin-top: 30px;
+  margin-left: 40px;
+  margin-right: 40px;
 }
 .hero {
   margin-bottom: 70px;
-  border-radius: 15px;
+  border-radius: 5px;
 }
 .title {
   line-height: 40px;
@@ -293,10 +289,13 @@ export default {
 .description {
   min-height: 70px;
   margin-bottom: 30px;
-  padding-left: 30px;
-  padding-right: 60px;
+  padding-right: 120px;
+}
+.signatures {
+  padding-right: 120px;
 }
 .card {
-  gap: 20px;
+  margin-top: 5px;
+  gap: 10px;
 }
 </style>

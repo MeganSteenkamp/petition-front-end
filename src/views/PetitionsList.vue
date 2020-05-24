@@ -1,26 +1,28 @@
 <template>
   <div class="petitions">
-    <h1 class="title">View petitions</h1>
-    <div class="search">
-      <h3>
-        <strong>Refine search</strong>
-      </h3>
-      <input v-model="search" placeholder="Search titles" @keypress="resetPage" />
-      <select
-        class="dropdown is-active"
-        v-model="category"
-        placeholder="category"
-        @change="resetPage"
-      >
-        <option value>All categories</option>
-        <option v-for="category in categories" :key="category">{{ category }}</option>
-      </select>
-      <select class="dropdown is-active" v-model="sort" placeholder="Sort" @change="resetPage">
-        <option value="ALPHABETICAL_ASC">Title A to Z</option>
-        <option value="ALPHABETICAL_DESC">Title Z to A</option>
-        <option value="SIGNATURES_ASC">Signatures Low to High</option>
-        <option value="SIGNATURES_DESC">Signatures High to Low</option>
-      </select>
+    <div class="header">
+      <h1 class="title">View petitions</h1>
+      <div class="search">
+        <h3>
+          <strong>Refine search</strong>
+        </h3>
+        <input v-model="search" placeholder="Search titles" @keypress="resetPage" />
+        <select
+          class="dropdown is-active"
+          v-model="category"
+          placeholder="category"
+          @change="resetPage"
+        >
+          <option value>All categories</option>
+          <option v-for="category in categories" :key="category">{{ category }}</option>
+        </select>
+        <select class="dropdown is-active" v-model="sort" placeholder="Sort" @change="resetPage">
+          <option value="ALPHABETICAL_ASC">Title A to Z</option>
+          <option value="ALPHABETICAL_DESC">Title Z to A</option>
+          <option value="SIGNATURES_ASC">Signatures Low to High</option>
+          <option value="SIGNATURES_DESC">Signatures High to Low</option>
+        </select>
+      </div>
     </div>
     <div v-if="currentPetitions && currentPetitions.length > 0">
       <div class="petitions-list">
@@ -231,12 +233,16 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.header {
+  margin-left: 60px;
+  margin-right: 60px;
+}
 .search {
   padding-bottom: 30px;
   line-height: 19px;
 }
 .petitions-list {
-  height: 700px;
+  height: 720px;
   overflow: auto;
   text-align: justify;
 }
@@ -249,7 +255,7 @@ export default {
 .empty-petitions {
   padding: 10px 10px 10px 10px;
   text-align: center;
-  border-radius: 15px;
+  border-radius: 5px;
   background-color: whitesmoke;
   background-size: cover;
   background-position: center;

@@ -42,8 +42,7 @@ export default {
 
 <style lang="scss" scoped>
 .card.is-horizontal {
-  background-color: whitesmoke;
-  border-radius: 15px;
+  border-radius: 5px;
   flex-direction: row;
   display: flex;
   flex-grow: 0;
@@ -54,7 +53,7 @@ export default {
   justify-content: right;
 }
 .card.is-horizontal .image {
-  border-radius: 15px;
+  border-radius: 5px;
   height: 100px;
   width: 100px;
   object-fit: cover;

@@ -1,13 +1,15 @@
 <template>
-  <div>
-    <h2>
-      Don't have an account?
-      <router-link to="/register">Sign up</router-link>
-    </h2>
+  <div class="login-container">
+    <div class="header">
+      <h1 class="title">Sign in</h1>
+      <h2 class="subtitle">
+        Don't have an account?
+        <router-link to="/register">Sign up</router-link>
+      </h2>
+    </div>
     <br />
     <form class="login" @submit.prevent="performLogin">
-      <h1 class="title">Sign in</h1>
-
+      <label>Email address</label>
       <div class="field" for="email">
         <div class="control">
           <input
@@ -22,6 +24,7 @@
       </div>
 
       <div class="field" for="password">
+        <label>Password</label>
         <div class="control">
           <input
             class="input"
@@ -88,3 +91,18 @@ export default {
   }
 };
 </script>
+
+<style lang="scss" scoped>
+.login-container {
+  margin-right: auto;
+  margin-left: auto;
+  width: 500px;
+}
+.header {
+  margin-top: 50px;
+  text-align: center;
+}
+.control {
+  max-width: 500px;
+}
+</style>

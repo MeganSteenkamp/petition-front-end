@@ -1,11 +1,13 @@
 <template>
-  <div>
-    <h2>
-      Already have an account?
-      <router-link to="/login">Log In</router-link>
-    </h2>
+  <div class="register-container">
+    <div class="header">
+      <h1 class="title">Register</h1>
+      <h2 class="subtitle">
+        Already have an account?
+        <router-link to="/login">Log In</router-link>
+      </h2>
+    </div>
     <br />
-    <h1 class="title">Register</h1>
     <form @submit.prevent="submit">
       <div class="field" for="name">
         <label class="required">Name</label>
@@ -83,6 +85,7 @@
         </div>
       </div>
 
+      <hr />
       <p v-if="errors.length">
         <b>Please correct the following error(s):</b>
       </p>
@@ -176,5 +179,17 @@ export default {
 }
 .label {
   text-align: left;
+}
+.register-container {
+  margin-right: auto;
+  margin-left: auto;
+  width: 500px;
+}
+.header {
+  margin-top: 50px;
+  text-align: center;
+}
+.control {
+  max-width: 500px;
 }
 </style>

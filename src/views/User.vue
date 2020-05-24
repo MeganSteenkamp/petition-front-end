@@ -72,7 +72,7 @@ export default {
 <style lang="scss" scoped>
 .hero {
   margin-bottom: 30px;
-  border-radius: 15px;
+  border-radius: 5px;
 }
 .title {
   line-height: 40px;

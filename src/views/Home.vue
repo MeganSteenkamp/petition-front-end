@@ -27,7 +27,7 @@ export default {
 <style lang="scss" scoped>
 .hero {
   text-align: center;
-  border-radius: 15px;
+  border-radius: 5px;
   background-image: url("./../assets/hero-image.jpg");
   background-size: cover;
   background-position: center;

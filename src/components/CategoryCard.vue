@@ -17,7 +17,7 @@ export default {
   height: 200px;
   background-image: url("./../assets/hero-image.jpg");
   background-color: hsl(0, 0%, 86%);
-  border-radius: 15px;
+  border-radius: 5px;
   display: flex;
   justify-content: center;
   align-items: center;
