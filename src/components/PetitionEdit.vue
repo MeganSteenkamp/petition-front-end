@@ -26,11 +26,11 @@
         <label class="required">Category</label>
         <div class="control">
           <div class="select">
-            <select id="categories" name="dropdown" v-model="petition.category" autofocus>
+            <select id="categories" name="dropdown" v-model="selectedCategory" autofocus>
               <option
                 v-for="category in categories"
-                :key="category.name"
-                :value="category.name"
+                :key="category.categoryId"
+                :value="category.categoryId"
               >{{ category.name }}</option>
             </select>
           </div>
@@ -40,7 +40,7 @@
       <div class="field" for="closingDate">
         <label>Closing date</label>
         <div class="control">
-          <date-picker v-model="petition.closingDate" type="date" />
+          <date-picker v-model="closingDate" type="date" />
         </div>
       </div>
 
@@ -78,7 +78,7 @@
 
 <script>
 import Vue from "vue";
-import { mapGetters, mapActions } from "vuex";
+import _default, { mapGetters, mapActions } from "vuex";
 import Moment from "moment";
 import DatePicker from "vue2-datepicker";
 import "vue2-datepicker/index.css";
@@ -90,9 +90,6 @@ export default {
     return {
       errors: [],
       loading: true,
-      title: "",
-      description: "",
-      selectedCategory: 1,
       image: null
     };
   },
@@ -104,11 +101,11 @@ export default {
     this.loading = false;
   },
   methods: {
-    ...mapActions(["loadPetition", "loadCategories", "loadUser"]),
+    ...mapActions(["loadPetition", "loadCategories", "loadUser", "updatePetition"]),
     getImageUrl(p) {
       return api.endpoint(`petitions/${p.petitionId}/photo`);
     },
-    validateForm: function() {
+    validateForm() {
       this.errors = [];
 
       const today = Moment();
@@ -124,25 +121,31 @@ export default {
 
       return this.errors.length === 0;
     },
-    async submit(e) {
-      let isValid = this.validateForm();
-      if (!isValid) {
+    async submit() {
+      let isValidForm = this.validateForm();
+      if (!isValidForm && this.image == null) {
         return;
       }
 
       let data = {
-        title: this.title,
-        description: this.description,
-        categoryId: this.selectedCategory
+        title: this.petition.title,
+        description: this.petition.description
       };
 
-      if (this.closingDate) {
-        data.closingDate = Moment(this.closingDate).format("YYYY-MM-DD");
-      }
+      //categoryId: this.selectedCategory,
+      //closingDate: Moment(this.closingDate).format("YYYY-MM-DD")
+
+      console.log(data);
+
       try {
-        let petitionId = await this.createPetition(data);
-        await api.uploadFile(`petitions/${petitionId}/photo`, this.image);
-        await api.post(`petitions/${petitionId}/signatures`, {});
+        let petitionId = this.petition.petitionId;
+        await this.updatePetition(data);
+        if (!!this.image) {
+          await api.uploadFile(
+            `petitions/${petitionId}/photo`,
+            this.image
+          );
+        }
         this.$router.push(`/petition/${petitionId}`);
       } catch (e) {
         this.errors.push(e.message);
@@ -156,15 +159,24 @@ export default {
     ...mapGetters(["petition", "categories", "user"]),
     petitionId() {
       return this.$route && this.$route.params.petitionId;
+    },
+    selectedCategory() {
+      for (var i = 0; i < this.categories.length; i++) {
+        if (this.categories[i].name == this.petition.category) {
+          return this.categories[i].categoryId;
+        }
+      }
+    },
+    closingDate() {
+      return Moment(this.petition.closingDate).toDate();
     }
   }
 };
 </script>
 
 <style>
-.required:after {
-  content: " *";
-  color: red;
+.image {
+  max-height: 200px;
 }
 .error {
   border: 1px solid red;

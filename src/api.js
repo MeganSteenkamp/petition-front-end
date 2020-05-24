@@ -65,6 +65,12 @@ const api = {
     });
     return result.data;
   },
+  async patch(resource, data) {
+    const result = await axios.patch(`${baseUrl}${resource}`, data, {
+      headers: getAuthHeader()
+    });
+    return result.data;
+  },
   async get(resource) {
     const result = await axios.get(`${baseUrl}${resource}`, {
       headers: getAuthHeader()

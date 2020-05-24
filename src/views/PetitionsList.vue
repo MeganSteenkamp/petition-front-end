@@ -36,7 +36,7 @@
         </div>
       </div>
     </div>
-    <div v-else>
+    <div v-if="currentPetitions && currentPetitions.length == 0">
       <div class="empty-petitions">
         <div class="subtitle is-size-2">
           <strong>We can't find any petitions.</strong>

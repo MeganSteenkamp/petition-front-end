@@ -1,25 +1,30 @@
 <template>
   <div class="petitions">
     <h1 class="title">My petitions</h1>
-    <div v-if="user && petitions && sortedPetitions.length > 0">
-      <div id="petitions">
-        <div v-for="petition in sortedPetitions" :key="petition.petitionId" class="petition">
-          <router-link
-            :to="{
+    <div v-if="loading"></div>
+    <div v-else>
+      <div v-if="user && petitions && sortedPetitions.length > 0">
+        <div id="petitions">
+          <div v-for="petition in sortedPetitions" :key="petition.petitionId" class="petition">
+            <router-link
+              :to="{
               name: 'petition',
               params: { petitionId: petition.petitionId }
             }"
-          >
-            <PetitionCard :petition="petition" />
-          </router-link>
+            >
+              <PetitionCard :petition="petition" />
+            </router-link>
+          </div>
         </div>
       </div>
-    </div>
-    <div v-if="user && petitions && sortedPetitions.length == 0">
-      <div class="empty-petitions">
-        <div class="subtitle is-size-2"><strong>You have no petitions.</strong></div>
-        <div class="subtitle">Is there something you want to change?</div>
-        <router-link class="tag is-danger is-large" to="/start-a-petition">Start a petition</router-link>
+      <div v-if="user && petitions && sortedPetitions.length == 0">
+        <div class="empty-petitions">
+          <div class="subtitle is-size-2">
+            <strong>You have no petitions.</strong>
+          </div>
+          <div class="subtitle">Is there something you want to change?</div>
+          <router-link class="tag is-danger is-large" to="/start-a-petition">Start a petition</router-link>
+        </div>
       </div>
     </div>
   </div>
@@ -34,9 +39,16 @@ export default {
   components: {
     PetitionCard
   },
+  data() {
+    return {
+      loading: true
+    };
+  },
   async mounted() {
+    this.loading = true;
     await this.loadUser();
     await this.loadPetitions();
+    this.loading = false;
   },
   methods: {
     ...mapActions(["loadUser", "loadPetitions"])
