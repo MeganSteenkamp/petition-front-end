@@ -132,6 +132,11 @@ export default {
     validateForm() {
       this.errors = [];
 
+      if (!!this.newPassword && !this.currentPassword) {
+        this.errors.push("Current password must be provided to change passwords.");
+        return;
+      }
+
       if (this.newPassword !== this.confirmPassword) {
         this.errors.push("Passwords do not match.");
         return;
@@ -150,6 +155,7 @@ export default {
       };
 
       if (this.user.email != this.originalEmail) {
+        // Need to check this or server will return email is already in use
         data.email = this.user.email;
       }
 
@@ -161,11 +167,16 @@ export default {
         data.country = this.user.country;
       }
 
+      if (this.newPassword) {
+        data.currentPassword = this.currentPassword;
+        data.password = this.newPassword;
+      }
       console.log(data);
 
       try {
         await this.updateUser(data);
         if (!!this.image) {
+          const userId = api.getUserId();
           await api.uploadFile(`users/${userId}/photo`, this.image);
         }
         this.$router.push("/account");

@@ -232,7 +232,7 @@ export default {
   line-height: 19px;
 }
 .petitions-list {
-  height: 750px;
+  height: 700px;
   overflow: auto;
   text-align: justify;
 }

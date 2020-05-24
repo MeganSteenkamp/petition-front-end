@@ -28,9 +28,14 @@
           </div>
         </div>
       </section>
-      <router-link :to="{name: 'edit-account'}">
-        <button class="button is-info is-right is-medium">Edit account</button>
-      </router-link>
+      <div class="columns">
+        <div class="column is-two-thirds"></div>
+        <div class="column is-one-third">
+          <router-link :to="{name: 'edit-account'}">
+            <button class="button is-info is-medium is-fullwidth">Edit account</button>
+          </router-link>
+        </div>
+      </div>
     </div>
   </div>
 </template>
