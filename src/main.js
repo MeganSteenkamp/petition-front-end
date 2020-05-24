@@ -10,6 +10,8 @@ import Petitions from "./views/PetitionsList";
 import MyPetitions from "./views/MyPetitions";
 import PetitionCreate from "./components/PetitionCreate";
 import PetitionEdit from "./components/PetitionEdit";
+import User from "./views/User";
+import UserEdit from "./components/UserEdit";
 import Login from "./components/Login";
 import Register from "./components/Register";
 import store from "./store";
@@ -63,6 +65,16 @@ const routes = [
     path: "/my-petitions",
     name: "my-petitions",
     component: MyPetitions
+  },
+  {
+    path: "/account",
+    name: "account",
+    component: User
+  },
+  {
+    path: "/edit-account",
+    name: "edit-account",
+    component: UserEdit
   },
   {
     path: "/start-a-petition",

@@ -18,15 +18,15 @@
                 <br />
               </h2>
               <p class="is-size-8">
-                Start date:
+                <strong>Start date:</strong>
                 {{ petition.createdDate | moment }}
               </p>
               <p class="is-size-8">
-                Closing date:
+                <strong>Closing date:</strong>
                 {{ petition.closingDate | moment }}
               </p>
               <p class="is-size-8">
-                Signatures:
+                <strong>Signatures:</strong>
                 {{ petition.signatureCount }}
               </p>
             </div>

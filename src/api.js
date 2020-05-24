@@ -40,7 +40,6 @@ export function getFileUploadHeader(data) {
 };
 
 const api = {
-  
   setUserAndToken(id, token) {
     localStorage.setItem(USER_ID_STORAGE_NAME, id);
     localStorage.setItem(TOKEN_STORAGE_NAME, token);
@@ -51,6 +50,9 @@ const api = {
   clearUserAndToken() {
     localStorage.removeItem(USER_ID_STORAGE_NAME);
     localStorage.removeItem(TOKEN_STORAGE_NAME);
+  },
+  getUserId() {
+    return getUserId();
   },
   async uploadFile(resource, data) {
     const fileHeader = getFileUploadHeader(data);
