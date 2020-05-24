@@ -88,7 +88,9 @@
               @click="deletePetition(petition)"
             >Delete petition</button>
             <router-link v-if="!this.user && closingDateIsValid(petition)" :to="{ name: 'login' }">
-              <button class="button is-danger is-medium is-light is-fullwidth">Sign in to sign this petition</button>
+              <button
+                class="button is-danger is-medium is-light is-fullwidth"
+              >Sign in to sign this petition</button>
             </router-link>
             <br />
             <h4>

@@ -166,7 +166,9 @@ export default {
       };
 
       if (this.petition.closingDate) {
-        data.closingDate = Moment(this.petition.closingDate).format("YYYY-MM-DD");
+        data.closingDate = Moment(this.petition.closingDate).format(
+          "YYYY-MM-DD"
+        );
       }
 
       try {
