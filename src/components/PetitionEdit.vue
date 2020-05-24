@@ -174,7 +174,9 @@ export default {
       this.petition.closingDate = Moment(date).format("YYYY-MM-DD");
     },
     onCategoryChange(category) {
-      this.petition.categoryId = Number.parseInt(document.getElementById("categories").value);
+      this.petition.categoryId = Number.parseInt(
+        document.getElementById("categories").value
+      );
     }
   },
   computed: {

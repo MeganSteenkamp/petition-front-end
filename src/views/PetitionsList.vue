@@ -46,16 +46,20 @@
       </div>
     </div>
     <div class="pagination">
-    <button class="button is-outlined" @click="updateIndex(0)" :disabled="!canGoPrevious">First</button>
-    <button class="button is-outlined" @click="previous" :disabled="!canGoPrevious">Previous</button>
-    <a v-for="(page, index) in pagedPetitions" :key="index" @click="updateIndex(index)">
-      <button class="button is-link is-outlined" v-if="index === pageIndex">
-        <b>{{ index + 1}}</b>
-      </button>
-      <button class="button is-outlined" v-else>{{ index + 1}}</button>
-    </a>
-    <button class="button is-outlined" @click="next" :disabled="!canGoNext">Next</button>
-    <button class="button is-outlined" @click="updateIndex(getLastPage)" :disabled="!canGoNext">Last</button>
+      <button class="button is-outlined" @click="updateIndex(0)" :disabled="!canGoPrevious">First</button>
+      <button class="button is-outlined" @click="previous" :disabled="!canGoPrevious">Previous</button>
+      <a v-for="(page, index) in pagedPetitions" :key="index" @click="updateIndex(index)">
+        <button class="button is-link is-outlined" v-if="index === pageIndex">
+          <b>{{ index + 1}}</b>
+        </button>
+        <button class="button is-outlined" v-else>{{ index + 1}}</button>
+      </a>
+      <button class="button is-outlined" @click="next" :disabled="!canGoNext">Next</button>
+      <button
+        class="button is-outlined"
+        @click="updateIndex(getLastPage)"
+        :disabled="!canGoNext"
+      >Last</button>
     </div>
   </div>
 </template>

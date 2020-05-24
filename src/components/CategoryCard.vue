@@ -8,15 +8,15 @@
 
 <script>
 export default {
-  props: ["category"],
+  props: ["category"]
 };
 </script>
 
 <style lang="scss" scoped>
 .card {
   height: 200px;
-  background-image: url('./../assets/hero-image.jpg');
-  background-color:hsl(0, 0%, 86%);
+  background-image: url("./../assets/hero-image.jpg");
+  background-color: hsl(0, 0%, 86%);
   border-radius: 15px;
   display: flex;
   justify-content: center;
@@ -24,7 +24,7 @@ export default {
 }
 .title {
   text-shadow: 1px 1px 1x rgba(0, 0, 0, 0.7);
-  color:white;
+  color: white;
   justify-content: center;
   align-self: center;
 }

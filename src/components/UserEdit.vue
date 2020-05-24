@@ -38,7 +38,26 @@
           :src="getImageUrl()"
           onerror="this.onerror=null;this.src='https://upload.wikimedia.org/wikipedia/commons/8/89/Portrait_Placeholder.png'"
         />
-        <div class="control">
+        <div v-if="!!hasProfilePicture">
+          <button
+            type="button"
+            class="button is-link is-light"
+            @click="showImageUpdate()"
+          >Update photo</button>
+          <button
+            type="button"
+            class="button is-danger is-light"
+            @click="deleteProfilePhoto()"
+          >Delete photo</button>
+        </div>
+        <div v-else>
+          <button
+            type="button"
+            class="button is-link is-light"
+            @click="showImageUpdate()"
+          >Upload photo</button>
+        </div>
+        <div v-if="!!updatingImage" class="control">
           <input
             type="file"
             accept="image/png, image/jpeg, image/gif"
@@ -48,10 +67,14 @@
         </div>
       </div>
 
+      <label>Password</label>
       <div>
-        <button type="button" class="button is-link" @click="showPasswordUpdate()">Update password</button>
+        <button
+          type="button"
+          class="button is-link is-light"
+          @click="showPasswordUpdate()"
+        >Update password</button>
       </div>
-
       <div v-if="!!this.editingPassword" class="field" for="password">
         <label>Current password</label>
         <div class="control">
@@ -106,6 +129,8 @@ export default {
       originalEmail: "",
       editingPassword: false,
       emailChanged: false,
+      updatingImage: false,
+      hasProfilePicture: true,
       currentPassword: "",
       newPassword: "",
       confirmPassword: ""
@@ -115,12 +140,31 @@ export default {
     this.loading = true;
     await this.loadUser();
     this.originalEmail = this.user.email;
+
+    const userId = api.getUserId();
+    try {
+      await api.get(`users/${userId}/photo`);
+    } catch (e) {
+      this.hasProfilePicture = false;
+    }
     this.loading = false;
   },
   methods: {
     ...mapActions(["loadUser", "updateUser"]),
     showPasswordUpdate() {
       this.editingPassword = !this.editingPassword;
+    },
+    showImageUpdate() {
+      this.updatingImage = !this.updatingImage;
+    },
+    async deleteProfilePhoto() {
+      const answer = confirm(
+        "Are you sure you want to delete this photo? If you confirm it will be permanently deleted"
+      );
+      if (answer) {
+        const userId = api.getUserId();
+        await api.delete(`users/${userId}/photo`);
+      }
     },
     getImageUrl() {
       const userId = api.getUserId();
@@ -133,7 +177,9 @@ export default {
       this.errors = [];
 
       if (!!this.newPassword && !this.currentPassword) {
-        this.errors.push("Current password must be provided to change passwords.");
+        this.errors.push(
+          "Current password must be provided to change passwords."
+        );
         return;
       }
 
@@ -171,7 +217,6 @@ export default {
         data.currentPassword = this.currentPassword;
         data.password = this.newPassword;
       }
-      console.log(data);
 
       try {
         await this.updateUser(data);

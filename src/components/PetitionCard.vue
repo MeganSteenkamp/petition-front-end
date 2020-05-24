@@ -4,7 +4,9 @@
       <div class="title is-size-4">{{ petition.title | capitalize }}</div>
       <div class="subtitle is-size-6">
         <div class="tag" :style="labelStyle(petition)">{{ petition.category }}</div>
-        <p><br /></p>
+        <p>
+          <br />
+        </p>
         <p class="author">Author: {{ petition.authorName }}</p>
         <p class="signatures">Signatures: {{ petition.signatureCount }}</p>
       </div>

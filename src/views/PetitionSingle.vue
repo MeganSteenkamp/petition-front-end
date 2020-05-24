@@ -11,9 +11,7 @@
               <h2 class="title is-6">
                 {{ petition.authorName }} started this petition
                 <br />
-                <div class="tag is-medium" :style="labelStyle(petition)">
-                  {{ petition.category }}
-                </div>
+                <div class="tag is-medium" :style="labelStyle(petition)">{{ petition.category }}</div>
                 <br />
                 <br />
               </h2>
@@ -42,11 +40,7 @@
                 <h4>
                   <strong>Signatories:</strong>
                 </h4>
-                <a
-                  v-for="signature in signatures"
-                  :key="signature.signatoryId"
-                  class="signatures"
-                >
+                <a v-for="signature in signatures" :key="signature.signatoryId" class="signatures">
                   <SignatoryCard :signatory="signature" />
                   <br />
                 </a>
@@ -64,9 +58,7 @@
               "
               class="button is-danger is-medium is-fullwidth"
               @click="signPetition(petition)"
-            >
-              Sign this petition
-            </button>
+            >Sign this petition</button>
             <button
               v-if="
                 this.user &&
@@ -76,9 +68,7 @@
               "
               class="button is-dark is-medium is-fullwidth"
               @click="removeSignature(petition)"
-            >
-              Remove signature
-            </button>
+            >Remove signature</button>
             <router-link
               v-if="
                 this.user && closingDateIsValid(petition) && isAuthor(petition)
@@ -88,9 +78,7 @@
                 params: { petitionId: petition.petitionId }
               }"
             >
-              <button class="button is-info is-medium is-fullwidth">
-                Edit petition
-              </button>
+              <button class="button is-info is-medium is-fullwidth">Edit petition</button>
             </router-link>
             <button
               v-if="
@@ -98,18 +86,9 @@
               "
               class="button is-warning is-medium is-fullwidth"
               @click="deletePetition(petition)"
-            >
-              Delete petition
-            </button>
-            <router-link
-              v-if="!this.user && closingDateIsValid(petition)"
-              :to="{ name: 'login' }"
-            >
-              <button
-                class="button is-danger is-medium is-fullwidth"
-              >
-                Sign in to sign this petition
-              </button>
+            >Delete petition</button>
+            <router-link v-if="!this.user && closingDateIsValid(petition)" :to="{ name: 'login' }">
+              <button class="button is-danger is-medium is-fullwidth">Sign in to sign this petition</button>
             </router-link>
             <br />
             <h4>
@@ -127,10 +106,7 @@
               :twitterUser="sharing.twitterUser"
             >
               <div class="tag is-medium is-link">
-                <font-awesome-icon
-                  style="margin-right:20px"
-                  :icon="['fab', network.icon]"
-                />
+                <font-awesome-icon style="margin-right:20px" :icon="['fab', network.icon]" />
                 <span>{{ network.name }}</span>
               </div>
             </ShareNetwork>
@@ -141,11 +117,7 @@
                   <br />
                   <strong>Author:</strong>
                 </h4>
-                <a
-                  v-for="signature in signatures"
-                  :key="signature.signatoryId"
-                  class="author"
-                >
+                <a v-for="signature in signatures" :key="signature.signatoryId" class="author">
                   <div v-if="petition.authorName == signature.name">
                     <SignatoryCard :signatory="signature" />
                   </div>

@@ -31,33 +31,27 @@
       <div class="field" for="city">
         <label>City</label>
         <div class="control">
-          <input
-            class="input"
-            type="text"
-            placeholder="City"
-            v-model="city"
-            autofocus
-          />
+          <input class="input" type="text" placeholder="City" v-model="city" autofocus />
         </div>
       </div>
 
       <div class="field" for="country">
         <label>Country</label>
         <div class="control">
-          <input
-            class="input"
-            type="text"
-            placeholder="Country"
-            v-model="country"
-            autofocus
-          />
+          <input class="input" type="text" placeholder="Country" v-model="country" autofocus />
         </div>
       </div>
 
       <div class="field" for="image">
         <label>Profile picture</label>
         <div class="control">
-          <input type="file" accept="image/png,image/jpeg,image/gif" @change="bindImage" id="profile-picture" autofocus />
+          <input
+            type="file"
+            accept="image/png, image/jpeg, image/gif"
+            @change="bindImage"
+            id="profile-picture"
+            autofocus
+          />
         </div>
       </div>
 

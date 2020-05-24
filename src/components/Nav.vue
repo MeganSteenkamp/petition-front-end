@@ -57,7 +57,6 @@ export default {
     ...mapGetters(["user"])
   }
 };
-
 </script>
 <style lang="scss" scoped>
 @import "./../../node_modules/bulma/css/bulma.css";
