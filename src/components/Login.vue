@@ -42,7 +42,7 @@
         <b>Please correct the following error(s):</b>
       </p>
       <ul>
-        <li v-for="error in errors" v-bind:key="error">{{ error }}</li>
+        <li class="error" v-for="error in errors" v-bind:key="error">{{ error }}</li>
       </ul>
       <button class="button is-link" type="submit">Login</button>
     </form>
@@ -75,6 +75,7 @@ export default {
         password: this.password
       };
       try {
+        this.errors = [];
         await this.login(details);
         this.$router.push("/");
       } catch (e) {
@@ -104,5 +105,12 @@ export default {
 }
 .control {
   max-width: 500px;
+}
+.error {
+  border: 1px solid red;
+  color: red;
+  border-radius: 5px;
+  padding: 5px;
+  margin-bottom: 15px;
 }
 </style>

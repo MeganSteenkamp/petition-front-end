@@ -1,124 +1,129 @@
 <template>
   <div v-if="loading"></div>
   <div v-else>
-    <h1 class="title">Update profile</h1>
-    <form @submit.prevent="submit">
-      <div class="field" for="name">
-        <label>Name</label>
-        <div class="control">
-          <input class="input" type="text" placeholder="Name" v-model="user.name" />
-        </div>
+    <div class="user-container">
+      <div class="header">
+        <h1 class="title">Update profile</h1>
       </div>
-
-      <div class="field" for="email">
-        <label>Email address</label>
-        <div class="control">
-          <input class="input" type="email" placeholder="Email address" v-model="user.email" />
+      <form @submit.prevent="submit">
+        <div class="field" for="name">
+          <label>Name</label>
+          <div class="control">
+            <input class="input" type="text" placeholder="Name" v-model="user.name" />
+          </div>
         </div>
-      </div>
 
-      <div class="field" for="city">
-        <label>City</label>
-        <div class="control">
-          <input class="input" type="text" placeholder="City" v-model="user.city" />
+        <div class="field" for="email">
+          <label>Email address</label>
+          <div class="control">
+            <input class="input" type="email" placeholder="Email address" v-model="user.email" />
+          </div>
         </div>
-      </div>
 
-      <div class="field" for="country">
-        <label>Country</label>
-        <div class="control">
-          <input class="input" type="text" placeholder="Country" v-model="user.country" />
+        <div class="field" for="city">
+          <label>City</label>
+          <div class="control">
+            <input class="input" type="text" placeholder="City" v-model="user.city" />
+          </div>
         </div>
-      </div>
 
-      <div class="field" for="image">
-        <label>Profile picture</label>
-        <img
-          v-if="!!hasProfilePicture && !updatingImage"
-          class="image"
-          :src="getImageUrl()"
-          onerror="this.onerror=null;this.src='https://upload.wikimedia.org/wikipedia/commons/8/89/Portrait_Placeholder.png'"
-        />
-        <div v-if="!!hasProfilePicture && !updatingImage">
+        <div class="field" for="country">
+          <label>Country</label>
+          <div class="control">
+            <input class="input" type="text" placeholder="Country" v-model="user.country" />
+          </div>
+        </div>
+
+        <div class="field" for="image">
+          <label>Profile picture</label>
+          <img
+            v-if="!!hasProfilePicture && !updatingImage"
+            class="image"
+            :src="getImageUrl()"
+            onerror="this.onerror=null;this.src='https://upload.wikimedia.org/wikipedia/commons/8/89/Portrait_Placeholder.png'"
+          />
+          <div v-if="!!hasProfilePicture && !updatingImage">
+            <button
+              type="button"
+              class="button is-link is-light"
+              @click="showImageUpdate()"
+            >Update photo</button>
+            <button
+              type="button"
+              class="button is-danger is-light"
+              @click="deleteProfilePhoto()"
+            >Delete photo</button>
+          </div>
+          <div v-else>
+            <button
+              v-if="!updatingImage"
+              type="button"
+              class="button is-link is-light"
+              @click="showImageUpdate()"
+            >Upload photo</button>
+          </div>
+          <div v-if="!!updatingImage" class="control">
+            <input
+              type="file"
+              accept="image/png, image/jpeg, image/gif"
+              @change="bindImage"
+              id="profile-picture"
+            />
+          </div>
+        </div>
+
+        <label>Password</label>
+        <div>
           <button
             type="button"
             class="button is-link is-light"
-            @click="showImageUpdate()"
-          >Update photo</button>
-          <button
-            type="button"
-            class="button is-danger is-light"
-            @click="deleteProfilePhoto()"
-          >Delete photo</button>
+            @click="showPasswordUpdate()"
+          >Update password</button>
         </div>
-        <div v-else>
-          <button
-            v-if="!updatingImage"
-            type="button"
-            class="button is-link is-light"
-            @click="showImageUpdate()"
-          >Upload photo</button>
+        <div v-if="!!this.editingPassword" class="field" for="password">
+          <label>Current password</label>
+          <div class="control">
+            <input class="input" type="password" placeholder="Password" v-model="currentPassword" />
+          </div>
         </div>
-        <div v-if="!!updatingImage" class="control">
-          <input
-            type="file"
-            accept="image/png, image/jpeg, image/gif"
-            @change="bindImage"
-            id="profile-picture"
-          />
-        </div>
-      </div>
 
-      <label>Password</label>
-      <div>
-        <button
-          type="button"
-          class="button is-link is-light"
-          @click="showPasswordUpdate()"
-        >Update password</button>
-      </div>
-      <div v-if="!!this.editingPassword" class="field" for="password">
-        <label>Current password</label>
-        <div class="control">
-          <input class="input" type="password" placeholder="Password" v-model="currentPassword" />
+        <div v-if="!!this.editingPassword" class="field" for="password">
+          <label>New password</label>
+          <div class="control">
+            <input class="input" type="password" placeholder="Password" v-model="newPassword" />
+          </div>
         </div>
-      </div>
 
-      <div v-if="!!this.editingPassword" class="field" for="password">
-        <label>New password</label>
-        <div class="control">
-          <input class="input" type="password" placeholder="Password" v-model="newPassword" />
+        <div v-if="!!this.editingPassword" class="field" for="password_confirmation">
+          <label>Confirm new password</label>
+          <div class="control">
+            <input
+              class="input"
+              type="password"
+              placeholder="Confirm Password"
+              v-model="confirmPassword"
+            />
+          </div>
         </div>
-      </div>
 
-      <div v-if="!!this.editingPassword" class="field" for="password_confirmation">
-        <label>Confirm new password</label>
-        <div class="control">
-          <input
-            class="input"
-            type="password"
-            placeholder="Confirm Password"
-            v-model="confirmPassword"
-          />
-        </div>
-      </div>
+        <hr />
+        <p v-if="errors.length">
+          <b>Please correct the following error(s):</b>
+        </p>
+        <ul>
+          <li class="error" v-for="error in errors" v-bind:key="error">{{ error }}</li>
+        </ul>
 
-      <p v-if="errors.length">
-        <b>Please correct the following error(s):</b>
-      </p>
-      <ul>
-        <li v-for="error in errors" v-bind:key="error">{{ error }}</li>
-      </ul>
-
-      <div class="field is-grouped">
-        <div class="control">
-          <button class="button is-link">Submit</button>
+        <div class="field is-grouped">
+          <div class="control">
+            <button class="button is-link">Submit</button>
+          </div>
+          <div class="control">
+            <router-link to="/account" class="button is-link is-light">Cancel</router-link>
+          </div>
         </div>
-        <div class="control">
-          <button class="button is-link is-light">Cancel</button>
-        </div>
-      </div>
-    </form>
+      </form>
+    </div>
   </div>
 </template>
 
@@ -238,7 +243,7 @@ export default {
         }
         this.$router.push("/account");
       } catch (e) {
-        this.errors.push(e);
+        this.errors.push("Please provide a valid current password");
       }
     }
   },
@@ -249,6 +254,15 @@ export default {
 </script>
 
 <style>
+.user-container {
+  margin-right: auto;
+  margin-left: auto;
+  width: 500px;
+}
+.header {
+  margin-top: 50px;
+  text-align: center;
+}
 .image {
   max-height: 200px;
 }

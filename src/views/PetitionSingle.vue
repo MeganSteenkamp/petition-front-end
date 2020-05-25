@@ -34,10 +34,10 @@
                 <h4>
                   <strong>Signatories:</strong>
                 </h4>
-                <a v-for="signature in signatures" :key="signature.signatoryId" class="signatures">
+                <div v-for="signature in signatures" :key="signature.signatoryId" class="signatures">
                   <SignatoryCard :signatory="signature" />
                   <br />
-                </a>
+                </div>
               </div>
             </div>
           </div>
@@ -111,11 +111,11 @@
                   <br />
                   <strong>Author:</strong>
                 </h4>
-                <a v-for="signature in signatures" :key="signature.signatoryId" class="author">
+                <div v-for="signature in signatures" :key="signature.signatoryId" class="author">
                   <div v-if="petition.authorName == signature.name">
                     <SignatoryCard :signatory="signature" />
                   </div>
-                </a>
+                </div>
               </div>
             </div>
           </div>

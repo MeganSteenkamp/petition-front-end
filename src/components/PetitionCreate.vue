@@ -73,7 +73,7 @@
           <button class="button is-link">Submit</button>
         </div>
         <div class="control">
-          <button class="button is-link is-light">Cancel</button>
+          <router-link to="/petitions" class="button is-link is-light">Cancel</router-link>
         </div>
       </div>
     </form>
