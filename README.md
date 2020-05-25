@@ -11,6 +11,7 @@ npm install
 
 # serve with hot reload at localhost:8080
 npm run dev
+```
 
 ### Author
 This project has been created by Megan Steenkamp for SENG365 2020 Web Computing Architectures.
