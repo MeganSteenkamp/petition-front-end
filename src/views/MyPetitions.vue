@@ -1,6 +1,8 @@
 <template>
   <div class="petitions">
-    <h1 class="title">My petitions</h1>
+    <div class="header">
+      <h1 class="title">My petitions</h1>
+    </div>
     <div v-if="loading"></div>
     <div v-else>
       <div v-if="user && petitions && sortedPetitions.length > 0">
@@ -79,11 +81,10 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.title {
-  color: #2c3e50;
-}
-.search {
-  padding-left: 60px;
+.header {
+  margin-left: 60px;
+  margin-right: 60px;
+  text-align: left;
 }
 .petition {
   padding-top: 20px;

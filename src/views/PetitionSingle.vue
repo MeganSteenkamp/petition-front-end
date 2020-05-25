@@ -76,7 +76,7 @@
             </router-link>
             <button
               v-if="
-                this.user && closingDateIsValid(petition) && isAuthor(petition)
+                this.user && isAuthor(petition)
               "
               class="button is-warning is-medium is-light is-fullwidth"
               @click="deletePetition(petition)"
