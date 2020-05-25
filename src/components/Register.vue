@@ -90,7 +90,7 @@
         <b>Please correct the following error(s):</b>
       </p>
       <ul>
-        <li v-for="error in errors" v-bind:key="error">{{ error }}</li>
+        <li class="error" v-for="error in errors" v-bind:key="error">{{ error }}</li>
       </ul>
 
       <div>
@@ -127,8 +127,9 @@ export default {
       this.errors = [];
 
       if (this.password !== this.passwordConfirmation) {
+        this.password = "";
+        this.passwordConfirmation = "";
         this.errors.push("Passwords do not match.");
-        return;
       }
 
       return this.errors.length === 0;
@@ -156,10 +157,12 @@ export default {
       try {
         let userId = await this.register(user);
         await this.login(user);
-        await api.uploadFile(`users/${userId}/photo`, this.image);
+        if (!!this.image) {
+          await api.uploadFile(`users/${userId}/photo`, this.image);
+        }
         this.$router.push("/");
       } catch (e) {
-        this.errors.push("Email is already in use");
+        this.errors.push("This email address is already in use");
       }
     }
   }
@@ -176,6 +179,7 @@ export default {
   color: red;
   border-radius: 5px;
   padding: 5px;
+  margin-bottom: 15px;
 }
 .label {
   text-align: left;

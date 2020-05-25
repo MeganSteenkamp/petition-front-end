@@ -1,6 +1,8 @@
 <template>
-  <div>
-    <h1 class="title">Start a petition</h1>
+  <div class="petition-container">
+    <div class="header">
+      <h1 class="title">Start a petition</h1>
+    </div>
     <form @submit.prevent="submit">
       <div class="field" for="title">
         <label class="required">Title</label>
@@ -58,6 +60,14 @@
         </div>
       </div>
 
+      <hr />
+      <p v-if="errors.length">
+        <b>Please correct the following error(s):</b>
+      </p>
+      <ul>
+        <li class="error" v-for="error in errors" v-bind:key="error">{{ error }}</li>
+      </ul>
+
       <div class="field is-grouped">
         <div class="control">
           <button class="button is-link">Submit</button>
@@ -65,12 +75,6 @@
         <div class="control">
           <button class="button is-link is-light">Cancel</button>
         </div>
-      </div>
-
-      <div class="field">
-        <ul>
-          <li class="error" v-for="error in errors" v-bind:key="error">{{ error }}</li>
-        </ul>
       </div>
     </form>
   </div>
@@ -152,6 +156,15 @@ export default {
 </script>
 
 <style>
+.petition-container {
+  margin-right: auto;
+  margin-left: auto;
+  width: 500px;
+}
+.header {
+  margin-top: 50px;
+  text-align: center;
+}
 .required:after {
   content: " *";
   color: red;
@@ -161,6 +174,7 @@ export default {
   color: red;
   border-radius: 5px;
   padding: 5px;
+  margin-bottom: 15px;
 }
 .label {
   text-align: left;
