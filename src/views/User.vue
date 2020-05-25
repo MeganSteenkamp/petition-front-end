@@ -32,7 +32,7 @@
         <div class="column is-two-thirds"></div>
         <div class="column is-one-third">
           <router-link :to="{name: 'edit-account'}">
-            <button class="button is-info is-medium is-fullwidth">Edit account</button>
+            <button class="button is-info is-light is-medium is-fullwidth">Edit account</button>
           </router-link>
         </div>
       </div>

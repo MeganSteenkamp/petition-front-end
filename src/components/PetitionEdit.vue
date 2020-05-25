@@ -1,91 +1,98 @@
 <template>
   <div v-if="loading"></div>
   <div v-else>
-    <h1 class="title">Edit petition</h1>
-    <form @submit.prevent="submit">
-      <div class="field" for="title">
-        <label class="required">Title</label>
-        <div class="control">
-          <input class="input" type="text" placeholder="Title" v-model="petition.title" autofocus />
-        </div>
+    <div class="petition-container">
+      <div class="header">
+        <h1 class="title">Edit petition</h1>
       </div>
-
-      <div class="field" for="description">
-        <label class="required">Description</label>
-        <div class="control">
-          <textarea
-            class="textarea"
-            placeholder="Description"
-            v-model="petition.description"
-            autofocus
-          ></textarea>
-        </div>
-      </div>
-
-      <div class="field" for="category">
-        <label class="required">Category</label>
-        <div class="control">
-          <div class="select">
-            <select
-              id="categories"
-              name="dropdown"
-              :value="categoryId"
-              @change="onCategoryChange"
-              autofocus
-            >
-              <option
-                v-for="category in categories"
-                :key="category.categoryId"
-                :value="category.categoryId"
-              >{{ category.name }}</option>
-            </select>
+      <form @submit.prevent="submit">
+        <div class="field" for="title">
+          <label class="required">Title</label>
+          <div class="control">
+            <input class="input" type="text" placeholder="Title" v-model="petition.title" autofocus />
           </div>
         </div>
-      </div>
 
-      <div class="field" for="closingDate">
-        <label>Closing date</label>
-        <div class="control">
-          <date-picker :value="closingDate" @change="onDateChange" type="date" />
+        <div class="field" for="description">
+          <label class="required">Description</label>
+          <div class="control">
+            <textarea
+              class="textarea"
+              placeholder="Description"
+              v-model="petition.description"
+              autofocus
+            ></textarea>
+          </div>
         </div>
-      </div>
 
-      <div v-if="!updatingImage && !image" class="field" for="image">
+        <div class="field" for="category">
+          <label class="required">Category</label>
+          <div class="control">
+            <div class="select">
+              <select
+                id="categories"
+                name="dropdown"
+                :value="categoryId"
+                @change="onCategoryChange"
+                autofocus
+              >
+                <option
+                  v-for="category in categories"
+                  :key="category.categoryId"
+                  :value="category.categoryId"
+                >{{ category.name }}</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <div class="field" for="closingDate">
+          <label>Closing date</label>
+          <div class="control">
+            <date-picker :value="closingDate" @change="onDateChange" type="date" />
+          </div>
+        </div>
+        
         <label class="required">Hero image</label>
-        <img class="image" :src="getImageUrl(petition)" />
-      </div>
-      <div>
-        <button
-          type="button"
-          class="button is-link is-light"
-          @click="showImageUpdate()"
-        >Update photo</button>
-      </div>
-      <div v-if="!!updatingImage" class="control">
-        <input
-          type="file"
-          accept="image/png, image/jpeg, image/gif"
-          @change="bindImage"
-          id="hero-image"
-          autofocus
-        />
-      </div>
-
-      <div class="field is-grouped">
-        <div class="control">
-          <button class="button is-link">Submit</button>
+        <div v-if="!updatingImage && !image" class="field" for="image">
+          <img class="image" :src="getImageUrl(petition)" />
         </div>
-        <div class="control">
-          <button class="button is-link is-light">Cancel</button>
+        <div>
+          <button
+            v-if="!updatingImage"
+            type="button"
+            class="button is-link is-light"
+            @click="showImageUpdate()"
+          >Update photo</button>
         </div>
-      </div>
+        <div v-if="!!updatingImage" class="control">
+          <input
+            type="file"
+            accept="image/png, image/jpeg, image/gif"
+            @change="bindImage"
+            id="hero-image"
+            autofocus
+          />
+        </div>
 
-      <div class="field">
+        <hr />
+        <p v-if="errors.length">
+          <b>Please correct the following error(s):</b>
+        </p>
         <ul>
           <li class="error" v-for="error in errors" v-bind:key="error">{{ error }}</li>
         </ul>
-      </div>
-    </form>
+
+        <div class="field is-grouped">
+          <div class="control">
+            <button class="button is-link">Submit</button>
+          </div>
+          <div class="control">
+            <button class="button is-link is-light">Cancel</button>
+          </div>
+        </div>
+      </form>
+    </div>
   </div>
 </template>
 
@@ -155,7 +162,7 @@ export default {
     },
     async submit() {
       let isValidForm = this.validateForm();
-      if (!isValidForm && this.image == null) {
+      if (!isValidForm) {
         return;
       }
 
@@ -214,6 +221,15 @@ export default {
 </script>
 
 <style>
+.petition-container {
+  margin-right: auto;
+  margin-left: auto;
+  width: 500px;
+}
+.header {
+  margin-top: 50px;
+  text-align: center;
+}
 .button {
   margin-top: 10px;
   margin-bottom: 10px;
@@ -226,6 +242,7 @@ export default {
   color: red;
   border-radius: 5px;
   padding: 5px;
+  margin-bottom: 15px;
 }
 .label {
   text-align: left;

@@ -39,7 +39,7 @@
           :src="getImageUrl()"
           onerror="this.onerror=null;this.src='https://upload.wikimedia.org/wikipedia/commons/8/89/Portrait_Placeholder.png'"
         />
-        <div v-if="!!hasProfilePicture">
+        <div v-if="!!hasProfilePicture && !updatingImage">
           <button
             type="button"
             class="button is-link is-light"
@@ -53,6 +53,7 @@
         </div>
         <div v-else>
           <button
+            v-if="!updatingImage"
             type="button"
             class="button is-link is-light"
             @click="showImageUpdate()"

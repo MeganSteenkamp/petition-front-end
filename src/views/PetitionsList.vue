@@ -236,6 +236,7 @@ export default {
 .header {
   margin-left: 60px;
   margin-right: 60px;
+  text-align: left;
 }
 .search {
   padding-bottom: 30px;
