@@ -1,4 +1,4 @@
-# SENG365 Petition Site
+# Petition Site
 
 A web client that communicates with the front end developed in Assignment I.
 Taken together, the web client and service provide a petition site.
